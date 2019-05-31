@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
-import org.kajal.mallick.repositories.ParentTaskManagerRepository;
-import org.kajal.mallick.repositories.TaskManagerRepository;
+import org.kajal.mallick.repositories.ParentTaskRepository;
+import org.kajal.mallick.repositories.TaskRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -24,9 +24,9 @@ public class TaskManagerDaoImplTest {
     @InjectMocks
     private TaskManagerDaoImpl taskManagerDao;
     @Mock
-    private TaskManagerRepository taskManagerRepository;
+    private TaskRepository taskRepository;
     @Mock
-    private ParentTaskManagerRepository parentTaskManagerRepository;
+    private ParentTaskRepository parentTaskRepository;
     private Task task;
     private ParentTask parentTask;
 
@@ -42,7 +42,7 @@ public class TaskManagerDaoImplTest {
 
     @Test
     public void findAllTasks() {
-        when(taskManagerRepository.findAll()).thenReturn(Collections.singletonList(task));
+        when(taskRepository.findAll()).thenReturn(Collections.singletonList(task));
         List<Task> tasks = taskManagerDao.findAllTasks();
         Assert.assertNotNull(tasks);
         Assert.assertEquals(1, tasks.size());
@@ -51,7 +51,7 @@ public class TaskManagerDaoImplTest {
 
     @Test
     public void findTaskById() {
-        when(taskManagerRepository.findById(anyLong())).thenReturn(Optional.of(task));
+        when(taskRepository.findById(anyLong())).thenReturn(Optional.of(task));
         Task task = taskManagerDao.findTaskById(1l);
         Assert.assertNotNull(task);
         Assert.assertEquals(TASK_NAME, task.getTaskName());
@@ -59,7 +59,7 @@ public class TaskManagerDaoImplTest {
 
     @Test
     public void saveTask() {
-        when(taskManagerRepository.save(any(Task.class))).thenReturn(task);
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
         Task savedTask = taskManagerDao.saveTask(task);
 
         Assert.assertNotNull(savedTask);
@@ -68,7 +68,7 @@ public class TaskManagerDaoImplTest {
 
     @Test
     public void updateTaskStatus() {
-        when(taskManagerRepository.updateTaskStatus(anyString(), anyLong())).thenReturn(1);
+        when(taskRepository.updateTaskStatus(anyString(), anyLong())).thenReturn(1);
         int upadtedRow = taskManagerDao.updateTaskStatus("status", 1l);
 
         Assert.assertTrue(upadtedRow > 0);
@@ -76,7 +76,7 @@ public class TaskManagerDaoImplTest {
 
     @Test
     public void findAllParentTasks() {
-        when(parentTaskManagerRepository.findAll()).thenReturn(Collections.singletonList(parentTask));
+        when(parentTaskRepository.findAll()).thenReturn(Collections.singletonList(parentTask));
         List<ParentTask> parentTasks = taskManagerDao.findAllParentTasks();
         Assert.assertNotNull(parentTasks);
         Assert.assertEquals(1, parentTasks.size());
@@ -85,7 +85,7 @@ public class TaskManagerDaoImplTest {
 
     @Test
     public void saveParentTask() {
-        when(parentTaskManagerRepository.save(any(ParentTask.class))).thenReturn(parentTask);
+        when(parentTaskRepository.save(any(ParentTask.class))).thenReturn(parentTask);
         ParentTask savedPrentTask = taskManagerDao.saveParentTask(parentTask);
 
         Assert.assertNotNull(savedPrentTask);

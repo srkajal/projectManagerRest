@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 import org.kajal.mallick.SpringBootAssignmentApplication;
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
-import org.kajal.mallick.repositories.ParentTaskManagerRepository;
-import org.kajal.mallick.repositories.TaskManagerRepository;
+import org.kajal.mallick.repositories.ParentTaskRepository;
+import org.kajal.mallick.repositories.TaskRepository;
 import org.kajal.mallick.util.TaskManagerConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,10 +36,10 @@ public class TaskManagerDaoImplIntegrationTest {
     String PARENT_TASK_NAME = "Parent Task 1";
 
     @Autowired
-    private TaskManagerRepository taskManagerRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
-    private ParentTaskManagerRepository parentTaskManagerRepository;
+    private ParentTaskRepository parentTaskRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -48,7 +48,7 @@ public class TaskManagerDaoImplIntegrationTest {
 
     @Test
     public void findAllTasks() {
-        List<Task> tasks = taskManagerRepository.findAll();
+        List<Task> tasks = taskRepository.findAll();
 
         Assert.assertNotNull(tasks);
         Assert.assertTrue(1 <= tasks.size());
@@ -57,7 +57,7 @@ public class TaskManagerDaoImplIntegrationTest {
 
     @Test
     public void findTaskById() {
-        Task task = taskManagerRepository.findById(1l).get();
+        Task task = taskRepository.findById(1l).get();
         Assert.assertNotNull(task);
         Assert.assertEquals(TASK_NAME, task.getTaskName());
     }
@@ -65,7 +65,7 @@ public class TaskManagerDaoImplIntegrationTest {
     @Test
     public void findAllParentTasks() {
 
-        List<ParentTask> parentTasks = parentTaskManagerRepository.findAll();
+        List<ParentTask> parentTasks = parentTaskRepository.findAll();
         Assert.assertNotNull(parentTasks);
         Assert.assertTrue(1 <= parentTasks.size());
         Assert.assertEquals("IPB", parentTasks.get(0).getParentTaskName());
@@ -85,7 +85,7 @@ public class TaskManagerDaoImplIntegrationTest {
         task.setParentTask(parentTask);
 
 
-        Task savedTask = taskManagerRepository.save(task);
+        Task savedTask = taskRepository.save(task);
         Assert.assertNotNull(savedTask);
         Assert.assertEquals(TaskManagerConstant.STATUS_OPEN, savedTask.getStatus());
     }

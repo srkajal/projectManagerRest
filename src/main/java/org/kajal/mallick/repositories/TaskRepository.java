@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface TaskManagerRepository extends JpaRepository<Task, Long> {
+public interface TaskRepository extends JpaRepository<Task, Long> {
     final static String UPDATE_TASK_STATUS = "update Task t set t.status = :status where t.taskId = :taskId";
 
     List<Task> findAll();

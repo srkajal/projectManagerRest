@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ParentTaskManagerRepository extends JpaRepository<ParentTask, Long> {
+public interface ParentTaskRepository extends JpaRepository<ParentTask, Long> {
 
     List<ParentTask> findAll();
 

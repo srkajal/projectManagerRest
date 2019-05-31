@@ -3,8 +3,8 @@ package org.kajal.mallick.dao;
 
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
-import org.kajal.mallick.repositories.ParentTaskManagerRepository;
-import org.kajal.mallick.repositories.TaskManagerRepository;
+import org.kajal.mallick.repositories.ParentTaskRepository;
+import org.kajal.mallick.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,42 +15,42 @@ import java.util.List;
 @Transactional
 public class TaskManagerDaoImpl implements TaskManagerDao {
 
-    private TaskManagerRepository taskManagerRepository;
+    private TaskRepository taskRepository;
 
-    private ParentTaskManagerRepository parentTaskManagerRepository;
+    private ParentTaskRepository parentTaskRepository;
 
     @Autowired
-    public TaskManagerDaoImpl(TaskManagerRepository taskManagerRepository, ParentTaskManagerRepository parentTaskManagerRepository) {
-        this.taskManagerRepository = taskManagerRepository;
-        this.parentTaskManagerRepository = parentTaskManagerRepository;
+    public TaskManagerDaoImpl(TaskRepository taskRepository, ParentTaskRepository parentTaskRepository) {
+        this.taskRepository = taskRepository;
+        this.parentTaskRepository = parentTaskRepository;
     }
 
     public List<Task> findAllTasks() {
-        return taskManagerRepository.findAll();
+        return taskRepository.findAll();
     }
 
     @Override
     public Task findTaskById(long taskId) {
-        return taskManagerRepository.findById(taskId).orElse(null);
+        return taskRepository.findById(taskId).orElse(null);
     }
 
     @Override
     public Task saveTask(Task task) {
-        return taskManagerRepository.save(task);
+        return taskRepository.save(task);
     }
 
     @Override
     public int updateTaskStatus(String status, long taskId) {
-        return taskManagerRepository.updateTaskStatus(status, taskId);
+        return taskRepository.updateTaskStatus(status, taskId);
     }
 
     @Override
     public List<ParentTask> findAllParentTasks() {
-        return parentTaskManagerRepository.findAll();
+        return parentTaskRepository.findAll();
     }
 
     @Override
     public ParentTask saveParentTask(ParentTask parentTask) {
-        return parentTaskManagerRepository.save(parentTask);
+        return parentTaskRepository.save(parentTask);
     }
 }
