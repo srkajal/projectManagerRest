@@ -96,6 +96,26 @@ public class ProjectTest {
         project2.setPriority(priority);
 
         assertTrue(project1.equals(project2));
+
+        assertTrue(project1.equals(project1));
+        assertFalse(project1.equals(null));
+        assertFalse(project1.equals(new Object()));
+        assertTrue(project1.equals(project2));
+
+        project2.setEndDate(LocalDate.ofYearDay(2019, 16));
+        assertFalse(project1.equals(project2));
+
+        project2.setStartDate(LocalDate.ofYearDay(2019, 13));
+        assertFalse(project1.equals(project2));
+
+        project2.setProjectName(projectName + 1);
+        assertFalse(project1.equals(project2));
+
+        project2.setPriority(priority + 1);
+        assertFalse(project1.equals(project2));
+
+        project2.setProjectId(projectId + 1);
+        assertFalse(project1.equals(project2));
     }
 
     @Test

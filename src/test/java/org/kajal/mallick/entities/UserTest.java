@@ -65,10 +65,19 @@ public class UserTest {
         ParentTask parentTask1 = new ParentTask(1l);
         parentTask1.setParentTaskName("task2");
         Task task1 = new Task(1l, parentTask1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
+        Task task2 = new Task(2l, parentTask1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
 
         Project project1 = new Project();
 
         project1.setProjectId(1l);
+        project1.setProjectName("Project Name");
+        project1.setStartDate(LocalDate.ofYearDay(2019, 12));
+        project1.setEndDate(LocalDate.ofYearDay(2019, 12));
+        project1.setPriority(1);
+
+        Project project2 = new Project();
+
+        project1.setProjectId(2l);
         project1.setProjectName("Project Name");
         project1.setStartDate(LocalDate.ofYearDay(2019, 12));
         project1.setEndDate(LocalDate.ofYearDay(2019, 12));
@@ -92,6 +101,29 @@ public class UserTest {
         user2.setProject(project1);
 
         assertTrue(user1.equals(user2));
+
+        assertTrue(user1.equals(user1));
+        assertFalse(user1.equals(null));
+        assertFalse(user1.equals(new Object()));
+        assertTrue(user1.equals(user2));
+
+        user2.setTask(task2);
+        assertFalse(user1.equals(user2));
+
+        user2.setProject(project2);
+        assertFalse(user1.equals(user2));
+
+        user2.setLastName("name4");
+        assertFalse(user1.equals(user2));
+
+        user2.setFirstName("name5");
+        assertFalse(user1.equals(user2));
+
+        user2.setEmployeeId(15);
+        assertFalse(user1.equals(user2));
+
+        user2.setUserId(2l);
+        assertFalse(user1.equals(user2));
     }
 
     @Test

@@ -67,12 +67,39 @@ public class TaskTest {
     public void equals1() {
         ParentTask parentTask1 = new ParentTask(1l);
         ParentTask parentTask2 = new ParentTask(1l);
+        ParentTask parentTask3 = new ParentTask(2l);
         parentTask1.setParentTaskName("task2");
         parentTask2.setParentTaskName("task2");
         Task task1 = new Task(1l, parentTask1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
         Task task2 = new Task(1l, parentTask2, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
 
         assertTrue(task1.equals(task2));
+
+        assertTrue(task1.equals(task1));
+        assertFalse(task1.equals(null));
+        assertFalse(task1.equals(new Object()));
+        assertTrue(task1.equals(task2));
+
+        task2.setStatus("status3");
+        assertFalse(task1.equals(task2));
+
+        task2.setEndDate(LocalDate.ofYearDay(2019, 16));
+        assertFalse(task1.equals(task2));
+
+        task2.setStartDate(LocalDate.ofYearDay(2019, 13));
+        assertFalse(task1.equals(task2));
+
+        task2.setTaskName("task3");
+        assertFalse(task1.equals(task2));
+
+        task2.setParentTask(parentTask3);
+        assertFalse(task1.equals(task2));
+
+        task2.setPriority(2);
+        assertFalse(task1.equals(task2));
+
+        task2.setTaskId(2l);
+        assertFalse(task1.equals(task2));
 
     }
 

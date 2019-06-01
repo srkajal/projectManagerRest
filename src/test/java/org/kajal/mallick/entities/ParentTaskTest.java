@@ -43,6 +43,10 @@ public class ParentTaskTest {
         assertFalse(parentTask1.equals(null));
         assertFalse(parentTask1.equals(new Object()));
         assertTrue(parentTask1.equals(parentTask2));
+        parentTask2.setParentTaskName("task3");
+        assertFalse(parentTask1.equals(parentTask2));
+        parentTask2.setParentId(3l);
+        assertFalse(parentTask1.equals(parentTask2));
 
     }
 
