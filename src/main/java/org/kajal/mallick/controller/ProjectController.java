@@ -1,34 +1,29 @@
 package org.kajal.mallick.controller;
 
-import org.kajal.mallick.model.request.ParentTaskRequest;
-import org.kajal.mallick.model.request.TaskRequest;
-import org.kajal.mallick.model.response.BaseResponse;
-import org.kajal.mallick.model.response.ParentTaskListResponse;
-import org.kajal.mallick.model.response.TaskListResponse;
-import org.kajal.mallick.model.response.TaskResponse;
-import org.kajal.mallick.service.TaskService;
+import org.kajal.mallick.model.response.ProjectListResponse;
+import org.kajal.mallick.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/task")
-class TaskManagerController {
+@RequestMapping("/api/project")
+class ProjectController {
 
-    private final TaskService taskService;
+    private final ProjectService projectService;
 
     @Autowired
-    public TaskManagerController(TaskService taskService) {
-        this.taskService = taskService;
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
     }
 
-    @GetMapping(value = "/findAllTasks")
-    TaskListResponse findAllTasks() {
-        return taskService.findAllTasks();
+    @GetMapping(value = "/findAllProjects")
+    ProjectListResponse findAllProjects() {
+        return projectService.findAllProjects();
     }
 
-    @GetMapping("/findAllParentTasks")
+    /*@GetMapping("/findAllParentTasks")
     ParentTaskListResponse findAllParentTasks() {
         return taskService.findAllParentTasks();
     }
@@ -59,5 +54,5 @@ class TaskManagerController {
     public @ResponseBody
     BaseResponse updateTask(@RequestBody @Valid TaskRequest taskRequest) {
         return taskService.update(taskRequest);
-    }
+    }*/
 }

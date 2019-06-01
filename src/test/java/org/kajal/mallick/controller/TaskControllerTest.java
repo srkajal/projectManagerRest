@@ -34,18 +34,21 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = TaskManagerController.class)
-public class TaskManagerControllerTest {
+@WebMvcTest(value = TaskController.class)
+public class TaskControllerTest {
 
     String PATH = "/api/task/";
     String TASK_NAME = "Task Name 1";
 
     private TaskDto taskDto;
+
+    private ParentTaskDto parentTaskDto;
+
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private TaskService taskService;
-    private ParentTaskDto parentTaskDto;
     private ObjectMapper objectMapper;
 
     @Before
