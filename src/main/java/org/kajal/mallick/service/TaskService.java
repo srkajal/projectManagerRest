@@ -3,15 +3,15 @@ package org.kajal.mallick.service;
 import org.kajal.mallick.model.request.ParentTaskRequest;
 import org.kajal.mallick.model.request.TaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
-import org.kajal.mallick.model.response.ExtendedParentTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskResponse;
+import org.kajal.mallick.model.response.ParentTaskListResponse;
+import org.kajal.mallick.model.response.TaskListResponse;
+import org.kajal.mallick.model.response.TaskResponse;
 
-public interface TaskManagerService {
+public interface TaskService {
 
-    ExtendedTaskListResponse findAllTasks();
+    TaskListResponse findAllTasks();
 
-    ExtendedTaskResponse findTaskById(long taskId);
+    TaskResponse findTaskById(long taskId);
 
     BaseResponse saveTask(TaskRequest taskRequest);
 
@@ -19,7 +19,7 @@ public interface TaskManagerService {
 
     BaseResponse closeTaskById(long taskId);
 
-    ExtendedParentTaskListResponse findAllParentTasks();
+    ParentTaskListResponse findAllParentTasks();
 
     BaseResponse saveParentTask(ParentTaskRequest parentTaskRequest);
 }

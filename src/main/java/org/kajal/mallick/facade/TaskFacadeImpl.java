@@ -1,6 +1,6 @@
 package org.kajal.mallick.facade;
 
-import org.kajal.mallick.dao.TaskManagerDao;
+import org.kajal.mallick.dao.TaskDao;
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.model.request.ParentTaskRequest;
@@ -12,22 +12,22 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class TaskManagerFacadeImpl implements TaskManagerFacade {
-    private TaskManagerDao taskManagerDao;
+public class TaskFacadeImpl implements TaskFacade {
+    private TaskDao taskDao;
 
     @Autowired
-    public TaskManagerFacadeImpl(TaskManagerDao taskManagerDao) {
-        this.taskManagerDao = taskManagerDao;
+    public TaskFacadeImpl(TaskDao taskDao) {
+        this.taskDao = taskDao;
     }
 
     @Override
     public List<Task> findAllTasks() {
-        return taskManagerDao.findAllTasks();
+        return taskDao.findAllTasks();
     }
 
     @Override
     public Task findTaskById(long taskId) {
-        return taskManagerDao.findTaskById(taskId);
+        return taskDao.findTaskById(taskId);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TaskManagerFacadeImpl implements TaskManagerFacade {
         }
 
         Task task = new Task(parentTask, taskRequest.getTaskName(), taskRequest.getStartDate(), taskRequest.getEndDate(), taskRequest.getPriority(), TaskManagerConstant.STATUS_OPEN);
-        return taskManagerDao.saveTask(task);
+        return taskDao.saveTask(task);
     }
 
     @Override
@@ -49,21 +49,21 @@ public class TaskManagerFacadeImpl implements TaskManagerFacade {
         }
 
         Task task = new Task(taskRequest.getTaskId(), parentTask, taskRequest.getTaskName(), taskRequest.getStartDate(), taskRequest.getEndDate(), taskRequest.getPriority(), TaskManagerConstant.STATUS_OPEN);
-        return taskManagerDao.saveTask(task);
+        return taskDao.saveTask(task);
     }
 
     @Override
     public int closeTaskById(long taskId) {
-        return taskManagerDao.updateTaskStatus(TaskManagerConstant.STATUS_CLOSED, taskId);
+        return taskDao.updateTaskStatus(TaskManagerConstant.STATUS_CLOSED, taskId);
     }
 
     @Override
     public List<ParentTask> findAllParentTasks() {
-        return taskManagerDao.findAllParentTasks();
+        return taskDao.findAllParentTasks();
     }
 
     @Override
     public ParentTask saveParentTask(ParentTaskRequest parentTaskRequest) {
-        return taskManagerDao.saveParentTask(new ParentTask(parentTaskRequest.getParentTaskName()));
+        return taskDao.saveParentTask(new ParentTask(parentTaskRequest.getParentTaskName()));
     }
 }

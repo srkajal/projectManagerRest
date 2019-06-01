@@ -18,6 +18,17 @@ public class Project implements Serializable {
     public Project() {
     }
 
+    public Project(String projectName, LocalDate startDate, LocalDate endDate, int priority) {
+        this.projectName = projectName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.priority = priority;
+    }
+
+    public Project(long projectId, String projectName, LocalDate startDate, LocalDate endDate, int priority) {
+        this(projectName, startDate, endDate, priority);
+        this.projectId = projectId;
+    }
 
     @Id
     @Column(name = "project_id")

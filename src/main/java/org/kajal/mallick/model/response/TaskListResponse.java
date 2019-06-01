@@ -3,18 +3,15 @@ package org.kajal.mallick.model.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kajal.mallick.model.TaskDto;
 
-public class ExtendedTaskResponse {
-    @JsonProperty("task")
-    private TaskDto taskDto;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TaskListResponse {
+    private List<TaskDto> tasks;
     @JsonProperty("response_detail")
     private BaseResponse baseResponse;
 
-    public TaskDto getTaskDto() {
-        return taskDto;
-    }
-
-    public void setTaskDto(TaskDto taskDto) {
-        this.taskDto = taskDto;
+    public TaskListResponse() {
     }
 
     public BaseResponse getBaseResponse() {
@@ -23,5 +20,16 @@ public class ExtendedTaskResponse {
 
     public void setBaseResponse(BaseResponse baseResponse) {
         this.baseResponse = baseResponse;
+    }
+
+    public List<TaskDto> getTasks() {
+        if (tasks == null) {
+            tasks = new ArrayList<>();
+        }
+        return tasks;
+    }
+
+    public void setTasks(List<TaskDto> tasks) {
+        this.tasks = tasks;
     }
 }

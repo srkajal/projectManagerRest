@@ -3,10 +3,10 @@ package org.kajal.mallick.controller;
 import org.kajal.mallick.model.request.ParentTaskRequest;
 import org.kajal.mallick.model.request.TaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
-import org.kajal.mallick.model.response.ExtendedParentTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskResponse;
-import org.kajal.mallick.service.TaskManagerService;
+import org.kajal.mallick.model.response.ParentTaskListResponse;
+import org.kajal.mallick.model.response.TaskListResponse;
+import org.kajal.mallick.model.response.TaskResponse;
+import org.kajal.mallick.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,48 +16,48 @@ import javax.validation.Valid;
 @RequestMapping("/api/task")
 class TaskManagerController {
 
-    private final TaskManagerService taskManagerService;
+    private final TaskService taskService;
 
     @Autowired
-    public TaskManagerController(TaskManagerService taskManagerService) {
-        this.taskManagerService = taskManagerService;
+    public TaskManagerController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @GetMapping(value = "/findAllTasks")
-    ExtendedTaskListResponse findAllTasks() {
-        return taskManagerService.findAllTasks();
+    TaskListResponse findAllTasks() {
+        return taskService.findAllTasks();
     }
 
     @GetMapping("/findAllParentTasks")
-    ExtendedParentTaskListResponse findAllParentTasks() {
-        return taskManagerService.findAllParentTasks();
+    ParentTaskListResponse findAllParentTasks() {
+        return taskService.findAllParentTasks();
     }
 
     @GetMapping("/findTaskById/{taskId}")
-    public ExtendedTaskResponse findTaskById(@PathVariable("taskId") long taskId) {
-        return taskManagerService.findTaskById(taskId);
+    public TaskResponse findTaskById(@PathVariable("taskId") long taskId) {
+        return taskService.findTaskById(taskId);
     }
 
     @GetMapping("/closeTaskById/{taskId}")
     public BaseResponse closeTaskById(@PathVariable("taskId") long taskId) {
-        return taskManagerService.closeTaskById(taskId);
+        return taskService.closeTaskById(taskId);
     }
 
     @PostMapping("/createTask")
     public @ResponseBody
     BaseResponse createTask(@RequestBody @Valid TaskRequest taskRequest) {
-        return taskManagerService.saveTask(taskRequest);
+        return taskService.saveTask(taskRequest);
     }
 
     @PostMapping("/createParentTask")
     public @ResponseBody
     BaseResponse createParentTask(@RequestBody @Valid ParentTaskRequest parentTaskRequest) {
-        return taskManagerService.saveParentTask(parentTaskRequest);
+        return taskService.saveParentTask(parentTaskRequest);
     }
 
     @PostMapping("/updateTask")
     public @ResponseBody
     BaseResponse updateTask(@RequestBody @Valid TaskRequest taskRequest) {
-        return taskManagerService.update(taskRequest);
+        return taskService.update(taskRequest);
     }
 }

@@ -9,10 +9,10 @@ import org.kajal.mallick.model.TaskDto;
 import org.kajal.mallick.model.request.ParentTaskRequest;
 import org.kajal.mallick.model.request.TaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
-import org.kajal.mallick.model.response.ExtendedParentTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskResponse;
-import org.kajal.mallick.service.TaskManagerService;
+import org.kajal.mallick.model.response.ParentTaskListResponse;
+import org.kajal.mallick.model.response.TaskListResponse;
+import org.kajal.mallick.model.response.TaskResponse;
+import org.kajal.mallick.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -44,7 +44,7 @@ public class TaskManagerControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private TaskManagerService taskManagerService;
+    private TaskService taskService;
     private ParentTaskDto parentTaskDto;
     private ObjectMapper objectMapper;
 
@@ -61,10 +61,10 @@ public class TaskManagerControllerTest {
     @Test
     public void findAllTasks() throws Exception {
 
-        ExtendedTaskListResponse extendedTaskListResponse = new ExtendedTaskListResponse();
-        extendedTaskListResponse.setTasks(Collections.singletonList(taskDto));
+        TaskListResponse taskListResponse = new TaskListResponse();
+        taskListResponse.setTasks(Collections.singletonList(taskDto));
 
-        when(taskManagerService.findAllTasks()).thenReturn(extendedTaskListResponse);
+        when(taskService.findAllTasks()).thenReturn(taskListResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(PATH + "findAllTasks")
                 .accept(MediaType.APPLICATION_JSON)
@@ -76,15 +76,15 @@ public class TaskManagerControllerTest {
                 .andExpect(jsonPath("$.tasks", hasSize(1)))
                 .andExpect(jsonPath("$.tasks[0].task_name", org.hamcrest.Matchers.is(TASK_NAME)));
 
-        verify(taskManagerService, times(1)).findAllTasks();
+        verify(taskService, times(1)).findAllTasks();
     }
 
     @Test
     public void findAllParentTasks() throws Exception {
-        ExtendedParentTaskListResponse extendedParentTaskListResponse = new ExtendedParentTaskListResponse();
-        extendedParentTaskListResponse.setParentTasks(Collections.singletonList(parentTaskDto));
+        ParentTaskListResponse parentTaskListResponse = new ParentTaskListResponse();
+        parentTaskListResponse.setParentTasks(Collections.singletonList(parentTaskDto));
 
-        when(taskManagerService.findAllParentTasks()).thenReturn(extendedParentTaskListResponse);
+        when(taskService.findAllParentTasks()).thenReturn(parentTaskListResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(PATH + "findAllParentTasks")
                 .accept(MediaType.APPLICATION_JSON)
@@ -96,14 +96,14 @@ public class TaskManagerControllerTest {
                 .andExpect(jsonPath("$.parent_tasks", hasSize(1)))
                 .andExpect(jsonPath("$.parent_tasks[0].parent_task_name", org.hamcrest.Matchers.is(TASK_NAME)));
 
-        verify(taskManagerService, times(1)).findAllParentTasks();
+        verify(taskService, times(1)).findAllParentTasks();
     }
 
     @Test
     public void findTaskById() throws Exception {
-        ExtendedTaskResponse extendedTaskResponse = new ExtendedTaskResponse();
-        extendedTaskResponse.setTaskDto(taskDto);
-        when(taskManagerService.findTaskById(anyLong())).thenReturn(extendedTaskResponse);
+        TaskResponse taskResponse = new TaskResponse();
+        taskResponse.setTaskDto(taskDto);
+        when(taskService.findTaskById(anyLong())).thenReturn(taskResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(PATH + "findTaskById/123")
                 .accept(MediaType.APPLICATION_JSON)
@@ -115,14 +115,14 @@ public class TaskManagerControllerTest {
                 .andExpect(jsonPath("$.task", org.hamcrest.Matchers.notNullValue()))
                 .andExpect(jsonPath("$.task.task_name", org.hamcrest.Matchers.is(TASK_NAME)));
 
-        verify(taskManagerService, times(1)).findTaskById(123l);
+        verify(taskService, times(1)).findTaskById(123l);
     }
 
     @Test
     public void closeTaskById() throws Exception {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(HttpStatus.OK.value());
-        when(taskManagerService.closeTaskById(anyLong())).thenReturn(baseResponse);
+        when(taskService.closeTaskById(anyLong())).thenReturn(baseResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(PATH + "closeTaskById/123")
                 .accept(MediaType.APPLICATION_JSON)
@@ -133,7 +133,7 @@ public class TaskManagerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", org.hamcrest.Matchers.is(HttpStatus.OK.value())));
 
-        verify(taskManagerService, times(1)).closeTaskById(123l);
+        verify(taskService, times(1)).closeTaskById(123l);
 
     }
 
@@ -150,7 +150,7 @@ public class TaskManagerControllerTest {
                 "    \"priority\": 5\n" +
                 "}";
 
-        when(taskManagerService.saveTask(any(TaskRequest.class))).thenReturn(baseResponse);
+        when(taskService.saveTask(any(TaskRequest.class))).thenReturn(baseResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(PATH + "createTask")
                 .accept(MediaType.APPLICATION_JSON)
@@ -162,7 +162,7 @@ public class TaskManagerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", org.hamcrest.Matchers.is(HttpStatus.CREATED.value())));
 
-        verify(taskManagerService, times(1)).saveTask(any(TaskRequest.class));
+        verify(taskService, times(1)).saveTask(any(TaskRequest.class));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class TaskManagerControllerTest {
                 "    \"priority\": 5\n" +
                 "}";
 
-        when(taskManagerService.saveTask(any(TaskRequest.class))).thenReturn(baseResponse);
+        when(taskService.saveTask(any(TaskRequest.class))).thenReturn(baseResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(PATH + "createTask")
                 .accept(MediaType.APPLICATION_JSON)
@@ -199,7 +199,7 @@ public class TaskManagerControllerTest {
                 "    \"parent_task_name\": \"AIM\"\n" +
                 "}";
 
-        when(taskManagerService.saveParentTask(any(ParentTaskRequest.class))).thenReturn(baseResponse);
+        when(taskService.saveParentTask(any(ParentTaskRequest.class))).thenReturn(baseResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(PATH + "createParentTask")
                 .accept(MediaType.APPLICATION_JSON)
@@ -211,7 +211,7 @@ public class TaskManagerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", org.hamcrest.Matchers.is(HttpStatus.CREATED.value())));
 
-        verify(taskManagerService, times(1)).saveParentTask(any(ParentTaskRequest.class));
+        verify(taskService, times(1)).saveParentTask(any(ParentTaskRequest.class));
 
     }
 
@@ -229,7 +229,7 @@ public class TaskManagerControllerTest {
                 "    \"priority\": 1\n" +
                 "}";
 
-        when(taskManagerService.update(any(TaskRequest.class))).thenReturn(baseResponse);
+        when(taskService.update(any(TaskRequest.class))).thenReturn(baseResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(PATH + "updateTask")
                 .accept(MediaType.APPLICATION_JSON)
@@ -241,6 +241,6 @@ public class TaskManagerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", org.hamcrest.Matchers.is(HttpStatus.OK.value())));
 
-        verify(taskManagerService, times(1)).update(any(TaskRequest.class));
+        verify(taskService, times(1)).update(any(TaskRequest.class));
     }
 }

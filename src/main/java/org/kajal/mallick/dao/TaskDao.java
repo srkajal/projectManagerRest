@@ -5,7 +5,7 @@ import org.kajal.mallick.entities.Task;
 
 import java.util.List;
 
-public interface TaskManagerDao {
+public interface TaskDao {
 
     List<Task> findAllTasks();
 

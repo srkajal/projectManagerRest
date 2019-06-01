@@ -6,13 +6,13 @@ import org.junit.Test;
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.exception.TaskException;
-import org.kajal.mallick.facade.TaskManagerFacade;
+import org.kajal.mallick.facade.TaskFacade;
 import org.kajal.mallick.model.request.ParentTaskRequest;
 import org.kajal.mallick.model.request.TaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
-import org.kajal.mallick.model.response.ExtendedParentTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskResponse;
+import org.kajal.mallick.model.response.ParentTaskListResponse;
+import org.kajal.mallick.model.response.TaskListResponse;
+import org.kajal.mallick.model.response.TaskResponse;
 import org.kajal.mallick.util.TaskManagerConstant;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,13 +26,13 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class TaskManagerServiceImplTest {
+public class TaskServiceImplTest {
 
     String TASK_NAME = "Task Name 1";
     @InjectMocks
-    private TaskManagerServiceImpl taskManagerService;
+    private TaskServiceImpl taskManagerService;
     @Mock
-    private TaskManagerFacade taskManagerFacade;
+    private TaskFacade taskFacade;
     private Task task;
     private ParentTask parentTask;
 
@@ -56,41 +56,41 @@ public class TaskManagerServiceImplTest {
 
     @Test
     public void findAllTasks() {
-        when(taskManagerFacade.findAllTasks()).thenReturn(Collections.singletonList(task));
-        ExtendedTaskListResponse extendedTaskListResponse = taskManagerService.findAllTasks();
+        when(taskFacade.findAllTasks()).thenReturn(Collections.singletonList(task));
+        TaskListResponse taskListResponse = taskManagerService.findAllTasks();
 
-        Assert.assertEquals(1, extendedTaskListResponse.getTasks().size());
-        Assert.assertEquals(TASK_NAME, extendedTaskListResponse.getTasks().get(0).getTask());
+        Assert.assertEquals(1, taskListResponse.getTasks().size());
+        Assert.assertEquals(TASK_NAME, taskListResponse.getTasks().get(0).getTask());
     }
 
     @Test
     public void findAllTasksNoTask() {
-        when(taskManagerFacade.findAllTasks()).thenReturn(null);
-        ExtendedTaskListResponse extendedTaskListResponse = taskManagerService.findAllTasks();
+        when(taskFacade.findAllTasks()).thenReturn(null);
+        TaskListResponse taskListResponse = taskManagerService.findAllTasks();
 
-        Assert.assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), extendedTaskListResponse.getBaseResponse().getStatus());
+        Assert.assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), taskListResponse.getBaseResponse().getStatus());
     }
 
     @Test
     public void findTaskById() {
-        when(taskManagerFacade.findTaskById(anyLong())).thenReturn(task);
-        ExtendedTaskResponse extendedTaskResponse = taskManagerService.findTaskById(1l);
+        when(taskFacade.findTaskById(anyLong())).thenReturn(task);
+        TaskResponse taskResponse = taskManagerService.findTaskById(1l);
 
         Assert.assertNotNull(task);
-        Assert.assertEquals(TASK_NAME, extendedTaskResponse.getTaskDto().getTask());
+        Assert.assertEquals(TASK_NAME, taskResponse.getTaskDto().getTask());
     }
 
     @Test
     public void findTaskByIdNoTask() {
-        when(taskManagerFacade.findTaskById(anyLong())).thenReturn(null);
-        ExtendedTaskResponse extendedTaskResponse = taskManagerService.findTaskById(1l);
+        when(taskFacade.findTaskById(anyLong())).thenReturn(null);
+        TaskResponse taskResponse = taskManagerService.findTaskById(1l);
 
-        Assert.assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), extendedTaskResponse.getBaseResponse().getStatus());
+        Assert.assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), taskResponse.getBaseResponse().getStatus());
     }
 
     @Test
     public void saveTask() {
-        when(taskManagerFacade.saveTask(any(TaskRequest.class))).thenReturn(task);
+        when(taskFacade.saveTask(any(TaskRequest.class))).thenReturn(task);
         BaseResponse baseResponse = taskManagerService.saveTask(new TaskRequest());
 
         Assert.assertEquals(HttpStatus.CREATED.getReasonPhrase(), baseResponse.getStatus());
@@ -98,7 +98,7 @@ public class TaskManagerServiceImplTest {
 
     @Test
     public void saveTaskUnableToSave() {
-        when(taskManagerFacade.saveTask(any(TaskRequest.class))).thenReturn(null);
+        when(taskFacade.saveTask(any(TaskRequest.class))).thenReturn(null);
         BaseResponse baseResponse = taskManagerService.saveTask(new TaskRequest());
 
         Assert.assertNotNull(task);
@@ -109,7 +109,7 @@ public class TaskManagerServiceImplTest {
     public void update() {
         TaskRequest taskRequest = new TaskRequest();
         taskRequest.setTaskId(1);
-        when(taskManagerFacade.update(any(TaskRequest.class))).thenReturn(task);
+        when(taskFacade.update(any(TaskRequest.class))).thenReturn(task);
         BaseResponse baseResponse = taskManagerService.update(taskRequest);
 
         Assert.assertEquals(HttpStatus.OK.getReasonPhrase(), baseResponse.getStatus());
@@ -119,7 +119,7 @@ public class TaskManagerServiceImplTest {
     public void updateUnableToUpdate() {
         TaskRequest taskRequest = new TaskRequest();
         taskRequest.setTaskId(1);
-        when(taskManagerFacade.update(any(TaskRequest.class))).thenReturn(null);
+        when(taskFacade.update(any(TaskRequest.class))).thenReturn(null);
         BaseResponse baseResponse = taskManagerService.update(taskRequest);
 
         Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), baseResponse.getStatus());
@@ -127,7 +127,7 @@ public class TaskManagerServiceImplTest {
 
     @Test
     public void closeTaskById() {
-        when(taskManagerFacade.closeTaskById(anyLong())).thenReturn(1);
+        when(taskFacade.closeTaskById(anyLong())).thenReturn(1);
         BaseResponse baseResponse = taskManagerService.closeTaskById(1l);
 
         Assert.assertEquals(HttpStatus.OK.getReasonPhrase(), baseResponse.getStatus());
@@ -135,7 +135,7 @@ public class TaskManagerServiceImplTest {
 
     @Test
     public void closeTaskByIdNoTask() {
-        when(taskManagerFacade.closeTaskById(anyLong())).thenReturn(0);
+        when(taskFacade.closeTaskById(anyLong())).thenReturn(0);
         BaseResponse baseResponse = taskManagerService.closeTaskById(1l);
 
         Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), baseResponse.getStatus());
@@ -143,7 +143,7 @@ public class TaskManagerServiceImplTest {
 
     @Test(expected = TaskException.class)
     public void closeTaskByIdExc() {
-        when(taskManagerFacade.closeTaskById(anyLong())).thenReturn(1);
+        when(taskFacade.closeTaskById(anyLong())).thenReturn(1);
         BaseResponse baseResponse = taskManagerService.closeTaskById(0l);
 
         Assert.assertEquals(HttpStatus.OK.getReasonPhrase(), baseResponse.getStatus());
@@ -151,24 +151,24 @@ public class TaskManagerServiceImplTest {
 
     @Test
     public void findAllParentTasks() {
-        when(taskManagerFacade.findAllParentTasks()).thenReturn(Collections.singletonList(parentTask));
-        ExtendedParentTaskListResponse extendedParentTaskListResponse = taskManagerService.findAllParentTasks();
+        when(taskFacade.findAllParentTasks()).thenReturn(Collections.singletonList(parentTask));
+        ParentTaskListResponse parentTaskListResponse = taskManagerService.findAllParentTasks();
 
-        Assert.assertEquals(1, extendedParentTaskListResponse.getParentTasks().size());
-        Assert.assertEquals(TASK_NAME, extendedParentTaskListResponse.getParentTasks().get(0).getParentTask());
+        Assert.assertEquals(1, parentTaskListResponse.getParentTasks().size());
+        Assert.assertEquals(TASK_NAME, parentTaskListResponse.getParentTasks().get(0).getParentTask());
     }
 
     @Test
     public void findAllParentTasksNoTask() {
-        when(taskManagerFacade.findAllParentTasks()).thenReturn(null);
-        ExtendedParentTaskListResponse extendedParentTaskListResponse = taskManagerService.findAllParentTasks();
+        when(taskFacade.findAllParentTasks()).thenReturn(null);
+        ParentTaskListResponse parentTaskListResponse = taskManagerService.findAllParentTasks();
 
-        Assert.assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), extendedParentTaskListResponse.getBaseResponse().getStatus());
+        Assert.assertEquals(HttpStatus.NOT_FOUND.getReasonPhrase(), parentTaskListResponse.getBaseResponse().getStatus());
     }
 
     @Test
     public void saveParentTask() {
-        when(taskManagerFacade.saveParentTask(any(ParentTaskRequest.class))).thenReturn(parentTask);
+        when(taskFacade.saveParentTask(any(ParentTaskRequest.class))).thenReturn(parentTask);
         BaseResponse baseResponse = taskManagerService.saveParentTask(new ParentTaskRequest());
 
         Assert.assertEquals(HttpStatus.CREATED.getReasonPhrase(), baseResponse.getStatus());
@@ -176,7 +176,7 @@ public class TaskManagerServiceImplTest {
 
     @Test
     public void saveParentTaskUnableToSave() {
-        when(taskManagerFacade.saveParentTask(any(ParentTaskRequest.class))).thenReturn(null);
+        when(taskFacade.saveParentTask(any(ParentTaskRequest.class))).thenReturn(null);
         BaseResponse baseResponse = taskManagerService.saveParentTask(new ParentTaskRequest());
 
         Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), baseResponse.getStatus());

@@ -7,7 +7,7 @@ import org.kajal.mallick.model.request.TaskRequest;
 
 import java.util.List;
 
-public interface TaskManagerFacade {
+public interface TaskFacade {
     List<Task> findAllTasks();
 
     Task findTaskById(long taskId);

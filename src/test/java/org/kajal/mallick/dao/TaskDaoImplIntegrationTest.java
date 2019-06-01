@@ -29,7 +29,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @TestPropertySource(locations = "classpath:application-integrationtest.properties")
 @IfProfileValue(name = "live-external-tests-enabled", value = "true")
 @Sql("/sql/createTask.sql")
-public class TaskManagerDaoImplIntegrationTest {
+public class TaskDaoImplIntegrationTest {
 
     String TASK_NAME = "Task 1";
 

@@ -18,11 +18,11 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class TaskManagerDaoImplTest {
+public class TaskDaoImplTest {
 
     String TASK_NAME = "Task Name 1";
     @InjectMocks
-    private TaskManagerDaoImpl taskManagerDao;
+    private TaskDaoImpl taskManagerDao;
     @Mock
     private TaskRepository taskRepository;
     @Mock

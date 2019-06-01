@@ -3,15 +3,15 @@ package org.kajal.mallick.service;
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.exception.TaskException;
-import org.kajal.mallick.facade.TaskManagerFacade;
+import org.kajal.mallick.facade.TaskFacade;
 import org.kajal.mallick.model.ParentTaskDto;
 import org.kajal.mallick.model.TaskDto;
 import org.kajal.mallick.model.request.ParentTaskRequest;
 import org.kajal.mallick.model.request.TaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
-import org.kajal.mallick.model.response.ExtendedParentTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskListResponse;
-import org.kajal.mallick.model.response.ExtendedTaskResponse;
+import org.kajal.mallick.model.response.ParentTaskListResponse;
+import org.kajal.mallick.model.response.TaskListResponse;
+import org.kajal.mallick.model.response.TaskResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,26 +22,26 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 @Service
-public class TaskManagerServiceImpl implements TaskManagerService {
-    private Logger logger = LoggerFactory.getLogger(TaskManagerServiceImpl.class);
+public class TaskServiceImpl implements TaskService {
+    private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
 
-    private TaskManagerFacade taskManagerFacade;
+    private TaskFacade taskFacade;
 
     @Autowired
-    public TaskManagerServiceImpl(TaskManagerFacade taskManagerFacade) {
-        this.taskManagerFacade = taskManagerFacade;
+    public TaskServiceImpl(TaskFacade taskFacade) {
+        this.taskFacade = taskFacade;
     }
 
     @Override
-    public ExtendedTaskListResponse findAllTasks() {
-        ExtendedTaskListResponse extendedTaskListResponse = new ExtendedTaskListResponse();
+    public TaskListResponse findAllTasks() {
+        TaskListResponse taskListResponse = new TaskListResponse();
         BaseResponse baseResponse;
 
-        List<Task> taskList = taskManagerFacade.findAllTasks();
+        List<Task> taskList = taskFacade.findAllTasks();
 
         if (!CollectionUtils.isEmpty(taskList)) {
             taskList
-                    .forEach(task -> extendedTaskListResponse.getTasks()
+                    .forEach(task -> taskListResponse.getTasks()
                             .add(new TaskDto(task)));
             baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Number of Tasks found " + taskList.size());
 
@@ -51,24 +51,24 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             logger.info("No Task found");
         }
 
-        extendedTaskListResponse.setBaseResponse(baseResponse);
+        taskListResponse.setBaseResponse(baseResponse);
 
-        return extendedTaskListResponse;
+        return taskListResponse;
     }
 
     @Override
-    public ExtendedTaskResponse findTaskById(long taskId) {
-        ExtendedTaskResponse extendedTaskResponse = new ExtendedTaskResponse();
+    public TaskResponse findTaskById(long taskId) {
+        TaskResponse taskResponse = new TaskResponse();
         BaseResponse baseResponse;
 
         if (taskId <= 0) {
             throw new TaskException("TaskId should not be less than 1");
         }
 
-        Task task = taskManagerFacade.findTaskById(taskId);
+        Task task = taskFacade.findTaskById(taskId);
 
         if (task != null) {
-            extendedTaskResponse.setTaskDto(new TaskDto(task));
+            taskResponse.setTaskDto(new TaskDto(task));
             baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Task found for Id:" + taskId);
             logger.info("Find task by id:{}", taskId);
         } else {
@@ -76,15 +76,15 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             logger.info("Task not found for id:{}", taskId);
         }
 
-        extendedTaskResponse.setBaseResponse(baseResponse);
+        taskResponse.setBaseResponse(baseResponse);
 
-        return extendedTaskResponse;
+        return taskResponse;
     }
 
     @Override
     public BaseResponse saveTask(TaskRequest taskRequest) {
 
-        Task savedTask = taskManagerFacade.saveTask(taskRequest);
+        Task savedTask = taskFacade.saveTask(taskRequest);
 
         if (savedTask != null) {
             logger.info("Task saved successfully :{}", taskRequest.getTaskName());
@@ -102,7 +102,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             throw new TaskException("TaskId should not be less than 1");
         }
 
-        Task updateTask = taskManagerFacade.update(taskRequest);
+        Task updateTask = taskFacade.update(taskRequest);
 
         if (updateTask != null) {
             logger.info("Task updated successfully :{}", taskRequest.getTaskName());
@@ -121,7 +121,7 @@ public class TaskManagerServiceImpl implements TaskManagerService {
         }
 
         try {
-            rowUpdated = taskManagerFacade.closeTaskById(taskId);
+            rowUpdated = taskFacade.closeTaskById(taskId);
         } catch (Exception ex) {
             rowUpdated = 0;
             logger.error("Unable to closed the Task", ex);
@@ -137,15 +137,15 @@ public class TaskManagerServiceImpl implements TaskManagerService {
     }
 
     @Override
-    public ExtendedParentTaskListResponse findAllParentTasks() {
-        ExtendedParentTaskListResponse extendedParentTaskListResponse = new ExtendedParentTaskListResponse();
+    public ParentTaskListResponse findAllParentTasks() {
+        ParentTaskListResponse parentTaskListResponse = new ParentTaskListResponse();
         BaseResponse baseResponse;
 
-        List<ParentTask> parentTaskList = taskManagerFacade.findAllParentTasks();
+        List<ParentTask> parentTaskList = taskFacade.findAllParentTasks();
 
         if (!CollectionUtils.isEmpty(parentTaskList)) {
             parentTaskList
-                    .forEach(task -> extendedParentTaskListResponse.getParentTasks()
+                    .forEach(task -> parentTaskListResponse.getParentTasks()
                             .add(new ParentTaskDto(task)));
             baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Number of Parent Tasks found " + parentTaskList.size());
 
@@ -155,14 +155,14 @@ public class TaskManagerServiceImpl implements TaskManagerService {
             logger.info("No Parent Task found");
         }
 
-        extendedParentTaskListResponse.setBaseResponse(baseResponse);
+        parentTaskListResponse.setBaseResponse(baseResponse);
 
-        return extendedParentTaskListResponse;
+        return parentTaskListResponse;
     }
 
     @Override
     public BaseResponse saveParentTask(ParentTaskRequest parentTaskRequest) {
-        ParentTask savedParentTask = taskManagerFacade.saveParentTask(parentTaskRequest);
+        ParentTask savedParentTask = taskFacade.saveParentTask(parentTaskRequest);
 
         if (savedParentTask != null) {
             logger.info("Parent Task saved successfully :{}", parentTaskRequest.getParentTaskName());

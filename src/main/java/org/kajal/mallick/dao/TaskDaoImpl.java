@@ -13,14 +13,14 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class TaskManagerDaoImpl implements TaskManagerDao {
+public class TaskDaoImpl implements TaskDao {
 
     private TaskRepository taskRepository;
 
     private ParentTaskRepository parentTaskRepository;
 
     @Autowired
-    public TaskManagerDaoImpl(TaskRepository taskRepository, ParentTaskRepository parentTaskRepository) {
+    public TaskDaoImpl(TaskRepository taskRepository, ParentTaskRepository parentTaskRepository) {
         this.taskRepository = taskRepository;
         this.parentTaskRepository = parentTaskRepository;
     }

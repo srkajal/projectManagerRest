@@ -6,13 +6,13 @@ import org.kajal.mallick.model.ParentTaskDto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExtendedParentTaskListResponse {
+public class ParentTaskListResponse {
     @JsonProperty("parent_tasks")
     private List<ParentTaskDto> parentTasks;
     @JsonProperty("response_detail")
     private BaseResponse baseResponse;
 
-    public ExtendedParentTaskListResponse() {
+    public ParentTaskListResponse() {
     }
 
     public BaseResponse getBaseResponse() {

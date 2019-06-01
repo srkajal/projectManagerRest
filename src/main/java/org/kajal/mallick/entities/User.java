@@ -18,6 +18,19 @@ public class User implements Serializable {
     public User() {
     }
 
+    public User(String firstName, String lastName, int employeeId, Project project, Task task) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.employeeId = employeeId;
+        this.project = project;
+        this.task = task;
+    }
+
+    public User(long userId, String firstName, String lastName, int employeeId, Project project, Task task) {
+        this(firstName, lastName, employeeId, project, task);
+        this.userId = userId;
+    }
+
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
