@@ -4,40 +4,28 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.kajal.mallick.BaseDataTest;
 import org.mockito.InjectMocks;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(Parameterized.class)
 public class ProjectTest {
+    private final Project project2;
     @InjectMocks
     private Project project;
 
-    private final long projectId;
-    private final String projectName;
-    private final LocalDate startDate;
-    private final LocalDate endDate;
-    private final int priority;
-
-    public ProjectTest(long projectId, String projectName, LocalDate startDate, LocalDate endDate, int priority) {
-        this.projectId = projectId;
-        this.projectName = projectName;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.priority = priority;
+    public ProjectTest(Project project2) {
+        this.project2 = project2;
     }
 
     @Parameterized.Parameters(name
-            = "{index}: Test with ID={0}, NAME={1}, START_DTAE={2}, END_DATE={3}, PRIORITY={4}")
+            = "{index}: Test with PROJECT={0}")
     public static Iterable<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {1l, "Project Name - 1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 15), 1},
-                {2l, "Project Name - 2", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 15), 2},
-        });
+        return BaseDataTest.projectData;
     }
 
     @Before
@@ -47,75 +35,75 @@ public class ProjectTest {
 
     @Test
     public void getProjectId() {
-        project.setProjectId(projectId);
+        project.setProjectId(project2.getProjectId());
 
-        assertEquals(projectId, project.getProjectId());
+        assertEquals(project2.getProjectId(), project.getProjectId());
     }
 
     @Test
     public void getProjectName() {
-        project.setProjectName(projectName);
-        assertEquals(projectName, project.getProjectName());
+        project.setProjectName(project2.getProjectName());
+        assertEquals(project2.getProjectName(), project.getProjectName());
     }
 
     @Test
     public void getStartDate() {
-        project.setStartDate(startDate);
+        project.setStartDate(project2.getStartDate());
 
-        assertEquals(startDate.getDayOfYear(), project.getStartDate().getDayOfYear());
+        assertEquals(project2.getStartDate().getDayOfYear(), project.getStartDate().getDayOfYear());
     }
 
     @Test
     public void getEndDate() {
-        project.setEndDate(endDate);
+        project.setEndDate(project2.getEndDate());
 
-        assertEquals(endDate.getDayOfYear(), project.getEndDate().getDayOfYear());
+        assertEquals(project2.getEndDate().getDayOfYear(), project.getEndDate().getDayOfYear());
     }
 
     @Test
     public void getPriority() {
-        project.setPriority(priority);
-        assertEquals(priority, project.getPriority());
+        project.setPriority(project2.getPriority());
+        assertEquals(project2.getPriority(), project.getPriority());
     }
 
     @Test
     public void equals1() {
         Project project1 = new Project();
-        Project project2 = new Project();
+        Project project3 = new Project();
 
-        project1.setProjectId(projectId);
-        project1.setProjectName(projectName);
-        project1.setStartDate(startDate);
-        project1.setEndDate(endDate);
-        project1.setPriority(priority);
+        project1.setProjectId(project2.getProjectId());
+        project1.setProjectName(project2.getProjectName());
+        project1.setStartDate(project2.getStartDate());
+        project1.setEndDate(project2.getEndDate());
+        project1.setPriority(project2.getPriority());
 
-        project2.setProjectId(projectId);
-        project2.setProjectName(projectName);
-        project2.setStartDate(startDate);
-        project2.setEndDate(endDate);
-        project2.setPriority(priority);
+        project3.setProjectId(project2.getProjectId());
+        project3.setProjectName(project2.getProjectName());
+        project3.setStartDate(project2.getStartDate());
+        project3.setEndDate(project2.getEndDate());
+        project3.setPriority(project2.getPriority());
 
-        assertTrue(project1.equals(project2));
+        assertTrue(project1.equals(project3));
 
         assertTrue(project1.equals(project1));
         assertFalse(project1.equals(null));
         assertFalse(project1.equals(new Object()));
-        assertTrue(project1.equals(project2));
+        assertTrue(project1.equals(project3));
 
-        project2.setEndDate(LocalDate.ofYearDay(2019, 16));
-        assertFalse(project1.equals(project2));
+        project3.setEndDate(LocalDate.ofYearDay(2019, 16));
+        assertFalse(project1.equals(project3));
 
-        project2.setStartDate(LocalDate.ofYearDay(2019, 13));
-        assertFalse(project1.equals(project2));
+        project3.setStartDate(LocalDate.ofYearDay(2019, 13));
+        assertFalse(project1.equals(project3));
 
-        project2.setProjectName(projectName + 1);
-        assertFalse(project1.equals(project2));
+        project3.setProjectName(project2.getProjectName() + 1);
+        assertFalse(project1.equals(project3));
 
-        project2.setPriority(priority + 1);
-        assertFalse(project1.equals(project2));
+        project3.setPriority(project2.getPriority() + 1);
+        assertFalse(project1.equals(project3));
 
-        project2.setProjectId(projectId + 1);
-        assertFalse(project1.equals(project2));
+        project3.setProjectId(project2.getProjectId() + 1);
+        assertFalse(project1.equals(project3));
     }
 
     @Test

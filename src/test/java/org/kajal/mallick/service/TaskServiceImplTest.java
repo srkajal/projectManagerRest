@@ -107,9 +107,8 @@ public class TaskServiceImplTest {
 
     @Test
     public void update() {
-        TaskRequest taskRequest = new TaskRequest();
-        taskRequest.setTaskId(1);
-        when(taskFacade.update(any(TaskRequest.class))).thenReturn(task);
+        TaskRequest taskRequest = new TaskRequest(1l, 2l, 3l, "Task", LocalDate.now(), LocalDate.now(), 3);
+        when(taskFacade.update(any(TaskRequest.class))).thenReturn(1);
         BaseResponse baseResponse = taskManagerService.update(taskRequest);
 
         Assert.assertEquals(HttpStatus.OK.getReasonPhrase(), baseResponse.getStatus());
@@ -119,7 +118,7 @@ public class TaskServiceImplTest {
     public void updateUnableToUpdate() {
         TaskRequest taskRequest = new TaskRequest();
         taskRequest.setTaskId(1);
-        when(taskFacade.update(any(TaskRequest.class))).thenReturn(null);
+        when(taskFacade.update(any(TaskRequest.class))).thenReturn(0);
         BaseResponse baseResponse = taskManagerService.update(taskRequest);
 
         Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), baseResponse.getStatus());

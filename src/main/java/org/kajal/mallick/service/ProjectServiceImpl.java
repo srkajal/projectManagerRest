@@ -1,10 +1,13 @@
 package org.kajal.mallick.service;
 
 import org.kajal.mallick.entities.Project;
+import org.kajal.mallick.exception.ProjectException;
 import org.kajal.mallick.facade.ProjectFacade;
 import org.kajal.mallick.model.ProjectDto;
+import org.kajal.mallick.model.request.ProjectRequest;
 import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ProjectListResponse;
+import org.kajal.mallick.model.response.ProjectResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +52,69 @@ public class ProjectServiceImpl implements ProjectService {
         projectListResponse.setBaseResponse(baseResponse);
 
         return projectListResponse;
+    }
+
+    @Override
+    public ProjectResponse findByProjectId(long projectId) {
+        ProjectResponse projectResponse = new ProjectResponse();
+        BaseResponse baseResponse;
+
+        if (projectId <= 0) {
+            throw new ProjectException("ProjectId should not be less than 1");
+        }
+
+        Project project = projectFacade.findByProjectId(projectId);
+
+        if (project != null) {
+            projectResponse.setProjectDto(new ProjectDto(project));
+            baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Project found for Id:" + projectId);
+            logger.info("Find project by id:{}", projectId);
+        } else {
+            baseResponse = new BaseResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND.value(), "No Project found for Id:" + projectId);
+            logger.info("Task not found for id:{}", projectId);
+        }
+
+        projectResponse.setBaseResponse(baseResponse);
+
+        return projectResponse;
+    }
+
+    @Override
+    public BaseResponse createProject(ProjectRequest projectRequest) {
+        Project savedProject = projectFacade.saveProject(projectRequest);
+
+        if (savedProject != null) {
+            logger.info("Project saved successfully :{}", projectRequest.getProjectName());
+            return new BaseResponse(HttpStatus.CREATED.getReasonPhrase(), HttpStatus.CREATED.value(), "Project saved successfully");
+        } else {
+            logger.info("Unable to save the project :{}", projectRequest.getProjectName());
+            return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to save task");
+        }
+    }
+
+    @Override
+    public BaseResponse updateProject(ProjectRequest projectRequest) {
+        if (projectRequest.getProjectId() <= 0) {
+            throw new ProjectException("ProjectId should not be less than 1");
+        }
+
+        int rowUpdated = projectFacade.updateProject(projectRequest);
+
+        if (rowUpdated > 0) {
+            logger.info("Project updated successfully :{}", projectRequest.getProjectName());
+            return new BaseResponse(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), "Project updated successfully");
+        } else {
+            logger.info("Unable to updated the project :{}", projectRequest.getProjectName());
+            return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to updated task");
+        }
+    }
+
+    @Override
+    public BaseResponse deleteProject(long projectId) {
+
+        projectFacade.deleteProject(projectId);
+        logger.info("Project deleted successfully :{}", projectId);
+        return new BaseResponse(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), "Project deleted successfully");
+
     }
 }

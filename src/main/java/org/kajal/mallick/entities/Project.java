@@ -3,6 +3,7 @@ package org.kajal.mallick.entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,8 +15,13 @@ public class Project implements Serializable {
     private LocalDate startDate;
     private LocalDate endDate;
     private int priority;
+    private List<Task> tasks;
 
     public Project() {
+    }
+
+    public Project(long projectId) {
+        this.projectId = projectId;
     }
 
     public Project(String projectName, LocalDate startDate, LocalDate endDate, int priority) {
@@ -76,6 +82,15 @@ public class Project implements Serializable {
         this.priority = priority;
     }
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "project")
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,6 +116,7 @@ public class Project implements Serializable {
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", priority=" + priority +
+                ", tasks=" + tasks +
                 '}';
     }
 }

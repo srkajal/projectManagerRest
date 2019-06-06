@@ -25,7 +25,7 @@ public class SpringBootAssignmentApplication extends SpringBootServletInitialize
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/task/**").allowedOrigins("http://localhost:4200", "http://localhost:4000", "http://localhost:8080");
+                registry.addMapping("/api/**").allowedOrigins("http://localhost:4200", "http://localhost:4000", "http://localhost:8080");
             }
         };
     }

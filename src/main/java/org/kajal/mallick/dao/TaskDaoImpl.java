@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -25,8 +26,14 @@ public class TaskDaoImpl implements TaskDao {
         this.parentTaskRepository = parentTaskRepository;
     }
 
+    @Override
     public List<Task> findAllTasks() {
-        return taskRepository.findAll();
+        return taskRepository.findAllTasks();
+    }
+
+    @Override
+    public List<Task> findAllByProjectId(long projectId) {
+        return taskRepository.findAllByProjectId(projectId);
     }
 
     @Override
@@ -52,5 +59,15 @@ public class TaskDaoImpl implements TaskDao {
     @Override
     public ParentTask saveParentTask(ParentTask parentTask) {
         return parentTaskRepository.save(parentTask);
+    }
+
+    @Override
+    public int updateTaskDetails(String taskName, LocalDate startDate, LocalDate endDate, int priority, long parentId, long projectId, long taskId) {
+        return taskRepository.updateTaskDetails(taskName, startDate, endDate, priority, parentId, projectId, taskId);
+    }
+
+    @Override
+    public void deleteTasksByIds(List<Long> taskIds) {
+        taskRepository.deleteTaksByIds(taskIds);
     }
 }

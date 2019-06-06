@@ -7,6 +7,8 @@ import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.entities.User;
 import org.mockito.InjectMocks;
 
+import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -71,6 +73,9 @@ public class UserDtoTest {
 
         Task task = new Task();
         task.setTaskId(7l);
+        task.setStatus("OPEN");
+
+        project.setTasks(Collections.singletonList(task));
 
         User user = new User();
         user.setUserId(8l);

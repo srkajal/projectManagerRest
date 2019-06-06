@@ -2,12 +2,28 @@ package org.kajal.mallick.repositories;
 
 import org.kajal.mallick.entities.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+    static final String UPDATE_PROJECT_DETAILS = "update Project p set p.projectName = :projectName, p.startDate = :startDate, p.endDate = :endDate, p.priority = :priority where p.projectId = :projectId";
+    //static final String FIND_ALL_PROJECTS_WITH_TASKS = "SELECT p, p.tasks FROM Project p LEFT JOIN FETCH p.tasks";
+    static final String FIND_PROJECT_BY_PROJECT_ID_WITH_TASKS = "SELECT p FROM Project p LEFT JOIN FETCH p.tasks WHERE p.projectId = :projectId";
 
-    List<Project> findAll();
+
+    /*@Query(FIND_ALL_PROJECTS_WITH_TASKS)
+    List<Project> findAllProjectsWithTasks();*/
+
+    @Query(FIND_PROJECT_BY_PROJECT_ID_WITH_TASKS)
+    Optional<Project> findProjectByIdWithTasks(@Param("projectId") long id);
 
     Project save(Project project);
+
+    @Query(UPDATE_PROJECT_DETAILS)
+    @Modifying
+    int updateProjectDetails(@Param("projectName") String projectName, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("priority") int priority, @Param("projectId") long projectId);
 }

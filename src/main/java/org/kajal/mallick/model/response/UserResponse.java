@@ -3,15 +3,13 @@ package org.kajal.mallick.model.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kajal.mallick.model.UserDto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class UserListResponse {
-    private List<UserDto> users;
+public class UserResponse {
+    @JsonProperty("user")
+    private UserDto userDto;
     @JsonProperty("response_detail")
     private BaseResponse baseResponse;
 
-    public UserListResponse() {
+    public UserResponse() {
     }
 
     public BaseResponse getBaseResponse() {
@@ -22,12 +20,11 @@ public class UserListResponse {
         this.baseResponse = baseResponse;
     }
 
-    public List<UserDto> getUsers() {
-        users = users == null ? new ArrayList<>() : users;
-        return users;
+    public UserDto getUserDto() {
+        return userDto;
     }
 
-    public void setUsers(List<UserDto> users) {
-        this.users = users;
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
     }
 }

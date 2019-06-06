@@ -12,6 +12,7 @@ import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ParentTaskListResponse;
 import org.kajal.mallick.model.response.TaskListResponse;
 import org.kajal.mallick.model.response.TaskResponse;
+import org.kajal.mallick.util.TaskManagerConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,26 +35,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskListResponse findAllTasks() {
-        TaskListResponse taskListResponse = new TaskListResponse();
-        BaseResponse baseResponse;
-
         List<Task> taskList = taskFacade.findAllTasks();
+        return generateTasksResponseByList(taskList, TaskManagerConstant.TASKS_SUCCESS_MESSAGE, TaskManagerConstant.TASKS_FAILURE_MESSAGE);
+    }
 
-        if (!CollectionUtils.isEmpty(taskList)) {
-            taskList
-                    .forEach(task -> taskListResponse.getTasks()
-                            .add(new TaskDto(task)));
-            baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Number of Tasks found " + taskList.size());
-
-            logger.info("Find number of task:{}", taskList.size());
-        } else {
-            baseResponse = new BaseResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND.value(), "No Task found");
-            logger.info("No Task found");
-        }
-
-        taskListResponse.setBaseResponse(baseResponse);
-
-        return taskListResponse;
+    @Override
+    public TaskListResponse findAllByProjectId(long projectId) {
+        List<Task> taskList = taskFacade.findAllByProjectId(projectId);
+        return generateTasksResponseByList(taskList, TaskManagerConstant.TASKS_SUCCESS_MESSAGE, TaskManagerConstant.TASKS_FAILURE_MESSAGE);
     }
 
     @Override
@@ -102,9 +91,9 @@ public class TaskServiceImpl implements TaskService {
             throw new TaskException("TaskId should not be less than 1");
         }
 
-        Task updateTask = taskFacade.update(taskRequest);
+        int rowUpdated = taskFacade.update(taskRequest);
 
-        if (updateTask != null) {
+        if (rowUpdated > 0) {
             logger.info("Task updated successfully :{}", taskRequest.getTaskName());
             return new BaseResponse(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), "Task updated successfully");
         } else {
@@ -171,5 +160,26 @@ public class TaskServiceImpl implements TaskService {
             logger.info("Unable to save the parent task :{}", parentTaskRequest.getParentTaskName());
             return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to save parent task");
         }
+    }
+
+    private TaskListResponse generateTasksResponseByList(List<Task> taskList, String successMessage, String errorMessage) {
+        TaskListResponse taskListResponse = new TaskListResponse();
+        BaseResponse baseResponse;
+
+        if (!CollectionUtils.isEmpty(taskList)) {
+            taskList
+                    .forEach(task -> taskListResponse.getTasks()
+                            .add(new TaskDto(task)));
+            baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), String.format(successMessage, taskList.size()));
+
+            logger.info(String.format(successMessage, taskList.size()));
+        } else {
+            baseResponse = new BaseResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND.value(), errorMessage);
+            logger.info(errorMessage);
+        }
+
+        taskListResponse.setBaseResponse(baseResponse);
+
+        return taskListResponse;
     }
 }

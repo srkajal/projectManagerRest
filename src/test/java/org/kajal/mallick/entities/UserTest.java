@@ -64,10 +64,11 @@ public class UserTest {
     public void equals1() {
         ParentTask parentTask1 = new ParentTask(1l);
         parentTask1.setParentTaskName("task2");
-        Task task1 = new Task(1l, parentTask1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
-        Task task2 = new Task(2l, parentTask1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
 
-        Project project1 = new Project();
+        Project project1 = new Project(4l);
+        Task task1 = new Task(1l, parentTask1, project1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
+        Task task2 = new Task(2l, parentTask1, project1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
+
 
         project1.setProjectId(1l);
         project1.setProjectName("Project Name");

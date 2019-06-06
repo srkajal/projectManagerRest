@@ -99,7 +99,7 @@ class RestResponseEntityExceptionHandler
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(TaskException.class)
+    @ExceptionHandler({TaskException.class, UserException.class, ProjectException.class})
     public ResponseEntity<ErrorResponse> exceptionHandler(RuntimeException ex) {
         ErrorResponse error = new ErrorResponse(HttpStatus.PRECONDITION_FAILED, ex.getMessage(), "Error occurred");
         return new ResponseEntity<>(error, HttpStatus.OK);

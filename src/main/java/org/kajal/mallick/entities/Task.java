@@ -11,6 +11,7 @@ public class Task implements Serializable {
 
     private long taskId;
     private ParentTask parentTask;
+    private Project project;
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -20,8 +21,9 @@ public class Task implements Serializable {
     public Task() {
     }
 
-    public Task(ParentTask parentTask, String taskName, LocalDate startDate, LocalDate endDate, int priority, String status) {
+    public Task(ParentTask parentTask, Project project, String taskName, LocalDate startDate, LocalDate endDate, int priority, String status) {
         this.parentTask = parentTask;
+        this.project = project;
         this.taskName = taskName;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -29,14 +31,9 @@ public class Task implements Serializable {
         this.status = status;
     }
 
-    public Task(long taskId, ParentTask parentTask, String taskName, LocalDate startDate, LocalDate endDate, int priority, String status) {
+    public Task(long taskId, ParentTask parentTask, Project project, String taskName, LocalDate startDate, LocalDate endDate, int priority, String status) {
+        this(parentTask, project, taskName, startDate, endDate, priority, status);
         this.taskId = taskId;
-        this.parentTask = parentTask;
-        this.taskName = taskName;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.priority = priority;
-        this.status = status;
     }
 
     @Id
@@ -50,7 +47,7 @@ public class Task implements Serializable {
         this.taskId = taskId;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     public ParentTask getParentTask() {
         return parentTask;
@@ -58,6 +55,16 @@ public class Task implements Serializable {
 
     public void setParentTask(ParentTask parentTask) {
         this.parentTask = parentTask;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Column(name = "task_name")
@@ -110,7 +117,8 @@ public class Task implements Serializable {
         Task task = (Task) o;
         return taskId == task.taskId &&
                 priority == task.priority &&
-                parentTask.equals(task.parentTask) &&
+                Objects.equals(parentTask, task.parentTask) &&
+                project.equals(task.project) &&
                 taskName.equals(task.taskName) &&
                 startDate.equals(task.startDate) &&
                 endDate.equals(task.endDate) &&
@@ -119,7 +127,7 @@ public class Task implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(taskId, parentTask, taskName, startDate, endDate, priority, status);
+        return Objects.hash(taskId, parentTask, project, taskName, startDate, endDate, priority, status);
     }
 
     @Override
@@ -127,6 +135,7 @@ public class Task implements Serializable {
         return "Task{" +
                 "taskId=" + taskId +
                 ", parentTask=" + parentTask +
+                ", project=" + project +
                 ", taskName='" + taskName + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +

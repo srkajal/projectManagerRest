@@ -4,13 +4,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.kajal.mallick.dao.TaskDao;
+import org.kajal.mallick.dao.UserDao;
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
+import org.kajal.mallick.entities.User;
 import org.kajal.mallick.model.request.ParentTaskRequest;
 import org.kajal.mallick.model.request.TaskRequest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,6 +30,9 @@ public class TaskFacadeImplTest {
     private TaskDao taskDao;
     private Task task;
     private ParentTask parentTask;
+
+    @Mock
+    private UserDao userDao;
 
     @Before
     public void setUp() throws Exception {
@@ -61,6 +67,8 @@ public class TaskFacadeImplTest {
     @Test
     public void saveTask() {
         when(taskDao.saveTask(any(Task.class))).thenReturn(task);
+        when(userDao.findByUserId(anyLong())).thenReturn(new User());
+        when(userDao.updateTask(anyLong(), anyLong())).thenReturn(1);
         Task savedTask = taskManagerFacade.saveTask(new TaskRequest());
 
         Assert.assertNotNull(savedTask);
@@ -69,11 +77,11 @@ public class TaskFacadeImplTest {
 
     @Test
     public void update() {
-        when(taskDao.saveTask(any(Task.class))).thenReturn(task);
-        Task savedTask = taskManagerFacade.update(new TaskRequest());
+        TaskRequest taskRequest = new TaskRequest(1l, 2l, 3l, "Task", LocalDate.now(), LocalDate.now(), 3);
+        when(taskDao.updateTaskDetails(anyString(), any(LocalDate.class), any(LocalDate.class), anyInt(), anyLong(), anyLong(), anyLong())).thenReturn(1);
+        int rowUpdated = taskManagerFacade.update(taskRequest);
 
-        Assert.assertNotNull(savedTask);
-        Assert.assertEquals(TASK_NAME, savedTask.getTaskName());
+        Assert.assertTrue(rowUpdated > 0);
     }
 
     @Test

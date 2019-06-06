@@ -83,6 +83,26 @@ public class TaskControllerTest {
     }
 
     @Test
+    public void findAllTasksByProjectId() throws Exception {
+        TaskListResponse taskListResponse = new TaskListResponse();
+        taskListResponse.setTasks(Collections.singletonList(taskDto));
+
+        when(taskService.findAllByProjectId(anyLong())).thenReturn(taskListResponse);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(PATH + "findAllTasksByProjectId/1")
+                .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.tasks", hasSize(1)))
+                .andExpect(jsonPath("$.tasks[0].task_name", org.hamcrest.Matchers.is(TASK_NAME)));
+
+        verify(taskService, times(1)).findAllByProjectId(anyLong());
+    }
+
+    @Test
     public void findAllParentTasks() throws Exception {
         ParentTaskListResponse parentTaskListResponse = new ParentTaskListResponse();
         parentTaskListResponse.setParentTasks(Collections.singletonList(parentTaskDto));
@@ -147,6 +167,8 @@ public class TaskControllerTest {
 
         String taskRequestString = "{\n" +
                 "    \"parent_id\": 1,\n" +
+                "    \"project_id\": 1,\n" +
+                "    \"user_id\": 1,\n" +
                 "    \"task_name\": \"Task 1\",\n" +
                 "    \"start_date\": \"2019-06-09\",\n" +
                 "    \"end_date\": \"2019-07-09\",\n" +
@@ -175,6 +197,7 @@ public class TaskControllerTest {
 
         String taskRequestString = "{\n" +
                 "    \"parent_id\": 1,\n" +
+                "    \"project_id\": 1,\n" +
                 "    \"task_name\": \"\",\n" +
                 "    \"start_date\": \"2019-06-09\",\n" +
                 "    \"end_date\": \"2019-07-09\",\n" +
@@ -225,7 +248,9 @@ public class TaskControllerTest {
 
         String taskRequestString = "{\n" +
                 "    \"task_id\": 1,\n" +
+                "    \"user_id\": 1,\n" +
                 "    \"parent_id\": 3,\n" +
+                "    \"project_id\": 4,\n" +
                 "    \"task_name\": \"DataBase Issue\",\n" +
                 "    \"start_date\": \"2019-04-27\",\n" +
                 "    \"end_date\": \"2019-04-29\",\n" +

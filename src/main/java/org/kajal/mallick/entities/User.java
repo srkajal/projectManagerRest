@@ -18,13 +18,22 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String firstName, String lastName, int employeeId, Project project, Task task) {
+    public User(long userId) {
+        this.userId = userId;
+    }
+
+    public User(String firstName, String lastName, int employeeId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.employeeId = employeeId;
+    }
+
+    public User(String firstName, String lastName, int employeeId, Project project, Task task) {
+        this(firstName, lastName, employeeId);
         this.project = project;
         this.task = task;
     }
+
 
     public User(long userId, String firstName, String lastName, int employeeId, Project project, Task task) {
         this(firstName, lastName, employeeId, project, task);
@@ -69,7 +78,7 @@ public class User implements Serializable {
         this.employeeId = employeeId;
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     public Project getProject() {
         return project;
@@ -79,7 +88,7 @@ public class User implements Serializable {
         this.project = project;
     }
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id")
     public Task getTask() {
         return task;

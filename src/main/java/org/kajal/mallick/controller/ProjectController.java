@@ -1,11 +1,14 @@
 package org.kajal.mallick.controller;
 
+import org.kajal.mallick.model.request.ProjectRequest;
+import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ProjectListResponse;
+import org.kajal.mallick.model.response.ProjectResponse;
 import org.kajal.mallick.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/project")
@@ -23,36 +26,27 @@ class ProjectController {
         return projectService.findAllProjects();
     }
 
-    /*@GetMapping("/findAllParentTasks")
-    ParentTaskListResponse findAllParentTasks() {
-        return taskService.findAllParentTasks();
+    @GetMapping("/findProjectById/{projectId}")
+    public ProjectResponse findProjectById(@PathVariable("projectId") long projectId) {
+        return projectService.findByProjectId(projectId);
     }
 
-    @GetMapping("/findTaskById/{taskId}")
-    public TaskResponse findTaskById(@PathVariable("taskId") long taskId) {
-        return taskService.findTaskById(taskId);
-    }
-
-    @GetMapping("/closeTaskById/{taskId}")
-    public BaseResponse closeTaskById(@PathVariable("taskId") long taskId) {
-        return taskService.closeTaskById(taskId);
-    }
-
-    @PostMapping("/createTask")
+    @PostMapping("/createProject")
     public @ResponseBody
-    BaseResponse createTask(@RequestBody @Valid TaskRequest taskRequest) {
-        return taskService.saveTask(taskRequest);
+    BaseResponse createProject(@RequestBody @Valid ProjectRequest projectRequest) {
+        return projectService.createProject(projectRequest);
     }
 
-    @PostMapping("/createParentTask")
+    @PostMapping("/updateProject")
     public @ResponseBody
-    BaseResponse createParentTask(@RequestBody @Valid ParentTaskRequest parentTaskRequest) {
-        return taskService.saveParentTask(parentTaskRequest);
+    BaseResponse updateProject(@RequestBody @Valid ProjectRequest projectRequest) {
+        return projectService.updateProject(projectRequest);
     }
 
-    @PostMapping("/updateTask")
-    public @ResponseBody
-    BaseResponse updateTask(@RequestBody @Valid TaskRequest taskRequest) {
-        return taskService.update(taskRequest);
-    }*/
+
+    @GetMapping("/delete/{projectId}")
+    public BaseResponse deleteById(@PathVariable("projectId") long projectId) {
+        return projectService.deleteProject(projectId);
+    }
+
 }

@@ -28,6 +28,11 @@ class TaskController {
         return taskService.findAllTasks();
     }
 
+    @GetMapping(value = "/findAllTasksByProjectId/{projectId}")
+    TaskListResponse findAllTasksByProjectId(@PathVariable("projectId") long projectId) {
+        return taskService.findAllByProjectId(projectId);
+    }
+
     @GetMapping("/findAllParentTasks")
     ParentTaskListResponse findAllParentTasks() {
         return taskService.findAllParentTasks();

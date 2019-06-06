@@ -19,7 +19,6 @@ public class TaskDto implements Serializable {
     @JsonProperty("parent_task")
     private ParentTaskDto parentTaskDto;
 
-
     public TaskDto(Task task) {
         this.taskId = task.getTaskId();
         this.task = task.getTaskName();
@@ -31,7 +30,6 @@ public class TaskDto implements Serializable {
         if (task.getParentTask() != null) {
             this.parentTaskDto = new ParentTaskDto(task.getParentTask().getParentId(), task.getParentTask().getParentTaskName());
         }
-
     }
 
     public TaskDto() {

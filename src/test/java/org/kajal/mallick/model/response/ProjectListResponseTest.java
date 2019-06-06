@@ -29,8 +29,8 @@ public class ProjectListResponseTest {
             = "{index}: Test with PROJECTS={0}, BASE_RESPONSE={1}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {new ProjectDto(1l, "project -1", "01-01-2019", "01-02-2019", 1), new BaseResponse("SUCCESS", 200, "Successfully fetch")},
-                {new ProjectDto(2l, "project -2", "01-01-2019", "01-02-2019", 2), new BaseResponse("SUCCESS", 200, "Successfully fetch")}
+                {new ProjectDto(1l, "project -1", "01-01-2019", "01-02-2019", 1, 2), new BaseResponse("SUCCESS", 200, "Successfully fetch")},
+                {new ProjectDto(2l, "project -2", "01-01-2019", "01-02-2019", 2, 3), new BaseResponse("SUCCESS", 200, "Successfully fetch")}
         });
     }
 

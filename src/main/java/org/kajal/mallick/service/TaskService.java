@@ -11,6 +11,8 @@ public interface TaskService {
 
     TaskListResponse findAllTasks();
 
+    TaskListResponse findAllByProjectId(long projectId);
+
     TaskResponse findTaskById(long taskId);
 
     BaseResponse saveTask(TaskRequest taskRequest);

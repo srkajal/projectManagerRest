@@ -10,11 +10,13 @@ import java.util.List;
 public interface TaskFacade {
     List<Task> findAllTasks();
 
+    List<Task> findAllByProjectId(long projectId);
+
     Task findTaskById(long taskId);
 
     Task saveTask(TaskRequest taskRequest);
 
-    Task update(TaskRequest taskRequest);
+    int update(TaskRequest taskRequest);
 
     int closeTaskById(long taskId);
 

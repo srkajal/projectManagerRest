@@ -32,6 +32,14 @@ public class TaskTest {
     }
 
     @Test
+    public void getProject() {
+        Project project = new Project(1l, "Name", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 3);
+
+        task.setProject(project);
+        assertEquals(1l, task.getProject().getProjectId());
+    }
+
+    @Test
     public void getTaskName() {
         task.setTaskName("task1");
         assertEquals("task1", task.getTaskName());
@@ -68,10 +76,14 @@ public class TaskTest {
         ParentTask parentTask1 = new ParentTask(1l);
         ParentTask parentTask2 = new ParentTask(1l);
         ParentTask parentTask3 = new ParentTask(2l);
+
+        Project project1 = new Project(1l, "Name", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 3);
+        Project project2 = new Project(1l, "Name", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 3);
+        Project project3 = new Project(2l, "Name", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 3);
         parentTask1.setParentTaskName("task2");
         parentTask2.setParentTaskName("task2");
-        Task task1 = new Task(1l, parentTask1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
-        Task task2 = new Task(1l, parentTask2, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
+        Task task1 = new Task(1l, parentTask1, project1, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
+        Task task2 = new Task(1l, parentTask2, project2, "task1", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 1, "status1");
 
         assertTrue(task1.equals(task2));
 
@@ -95,6 +107,9 @@ public class TaskTest {
         task2.setParentTask(parentTask3);
         assertFalse(task1.equals(task2));
 
+        task2.setProject(project3);
+        assertFalse(task1.equals(task2));
+
         task2.setPriority(2);
         assertFalse(task1.equals(task2));
 
@@ -105,6 +120,9 @@ public class TaskTest {
 
     @Test
     public void hashCode1() {
+        Project project = new Project(1l, "Name", LocalDate.ofYearDay(2019, 12), LocalDate.ofYearDay(2019, 12), 3);
+
+        task.setProject(project);
         assertTrue(task.hashCode() > 0);
     }
 
