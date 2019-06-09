@@ -6,8 +6,10 @@ import org.kajal.mallick.dao.UserDao;
 import org.kajal.mallick.entities.Project;
 import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.entities.User;
-import org.kajal.mallick.exception.ProjectException;
+import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.model.request.ProjectRequest;
+import org.kajal.mallick.util.ProjectManagerConstant;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -44,23 +46,42 @@ public class ProjectFacadeImpl implements ProjectFacade {
         User user = userDao.findByUserId(projectRequest.getUserId());
 
         if (user == null) {
-            throw new ProjectException("User does not exist");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "User does not exist");
         }
 
         if (user.getProject() == null) {
-            Project project = projectDao.save(new Project(projectRequest.getProjectName(), projectRequest.getStartDate(), projectRequest.getEndDate(), projectRequest.getPriority()));
+            Project project = projectDao.save(new Project(projectRequest.getProjectName(), projectRequest.getStartDate(), projectRequest.getEndDate(), projectRequest.getPriority(), ProjectManagerConstant.STATUS_ACTIVE));
 
             userDao.updateProject(project.getProjectId(), projectRequest.getUserId());
 
             return project;
         } else {
-            throw new ProjectException("User already have a project");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "User already have a project");
         }
     }
 
     @Override
+    @Transactional
     public int updateProject(ProjectRequest projectRequest) {
+        User user = userDao.findByUserId(projectRequest.getUserId());
+
+        if (user.getProject() != null) {
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "User already have a project");
+        }
+
+        userDao.removeProjectFromUser(projectRequest.getProjectId());
+        userDao.updateProject(projectRequest.getProjectId(), projectRequest.getUserId());
         return projectDao.updateProjectDetails(projectRequest.getProjectName(), projectRequest.getStartDate(), projectRequest.getEndDate(), projectRequest.getPriority(), projectRequest.getProjectId());
+    }
+
+    @Override
+    public int suspendProject(long projectId) {
+        return projectDao.updateProjectStatus(ProjectManagerConstant.STATUS_SUSPENDED, projectId);
+    }
+
+    @Override
+    public int activateProject(long projectId) {
+        return projectDao.updateProjectStatus(ProjectManagerConstant.STATUS_ACTIVE, projectId);
     }
 
     @Override
@@ -73,7 +94,7 @@ public class ProjectFacadeImpl implements ProjectFacade {
             int rowUpdatedTasks = userDao.removeTasksFromUser(taskIds);
 
             if (rowUpdatedTasks <= 0) {
-                throw new ProjectException("Unable to remove tasks from user");
+                throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "Unable to remove tasks from user");
             }
 
             taskDao.deleteTasksByIds(taskIds);

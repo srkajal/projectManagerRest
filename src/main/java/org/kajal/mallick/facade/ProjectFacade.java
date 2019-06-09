@@ -14,5 +14,9 @@ public interface ProjectFacade {
 
     int updateProject(ProjectRequest projectRequest);
 
+    int suspendProject(long projectId);
+
+    int activateProject(long projectId);
+
     void deleteProject(long projectId);
 }

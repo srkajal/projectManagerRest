@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
-import org.kajal.mallick.exception.TaskException;
+import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.facade.TaskFacade;
 import org.kajal.mallick.model.request.ParentTaskRequest;
 import org.kajal.mallick.model.request.TaskRequest;
@@ -13,7 +13,7 @@ import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ParentTaskListResponse;
 import org.kajal.mallick.model.response.TaskListResponse;
 import org.kajal.mallick.model.response.TaskResponse;
-import org.kajal.mallick.util.TaskManagerConstant;
+import org.kajal.mallick.util.ProjectManagerConstant;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
@@ -48,7 +48,7 @@ public class TaskServiceImplTest {
         task.setTaskName(TASK_NAME);
         task.setTaskId(1);
         task.setPriority(1);
-        task.setStatus(TaskManagerConstant.STATUS_OPEN);
+        task.setStatus(ProjectManagerConstant.STATUS_OPEN);
         task.setEndDate(LocalDate.now());
         task.setEndDate(LocalDate.now());
         task.setParentTask(parentTask);
@@ -140,7 +140,7 @@ public class TaskServiceImplTest {
         Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), baseResponse.getStatus());
     }
 
-    @Test(expected = TaskException.class)
+    @Test(expected = BaseException.class)
     public void closeTaskByIdExc() {
         when(taskFacade.closeTaskById(anyLong())).thenReturn(1);
         BaseResponse baseResponse = taskManagerService.closeTaskById(0l);

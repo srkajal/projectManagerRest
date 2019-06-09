@@ -1,6 +1,7 @@
 package org.kajal.mallick.model.response;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
+import org.kajal.mallick.exception.BaseException;
 
 @JsonClassDescription("response_details")
 public class BaseResponse {
@@ -20,6 +21,10 @@ public class BaseResponse {
         this.status = status;
         this.code = code;
         this.message = message;
+    }
+
+    public BaseResponse(BaseException baseException) {
+        this(baseException.getStatus(), baseException.getCode(), baseException.getErrorMessage());
     }
 
     public String getStatus() {

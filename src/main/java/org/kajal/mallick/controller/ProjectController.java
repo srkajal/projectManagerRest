@@ -43,6 +43,17 @@ class ProjectController {
         return projectService.updateProject(projectRequest);
     }
 
+    @GetMapping("/suspendProject/{projectId}")
+    public @ResponseBody
+    BaseResponse suspendProject(@PathVariable("projectId") long projectId) {
+        return projectService.suspendProject(projectId);
+    }
+
+    @GetMapping("/activateProject/{projectId}")
+    public @ResponseBody
+    BaseResponse activateProject(@PathVariable("projectId") long projectId) {
+        return projectService.activateProject(projectId);
+    }
 
     @GetMapping("/delete/{projectId}")
     public BaseResponse deleteById(@PathVariable("projectId") long projectId) {

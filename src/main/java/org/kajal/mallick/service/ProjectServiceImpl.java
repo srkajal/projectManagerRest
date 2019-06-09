@@ -1,7 +1,7 @@
 package org.kajal.mallick.service;
 
 import org.kajal.mallick.entities.Project;
-import org.kajal.mallick.exception.ProjectException;
+import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.facade.ProjectFacade;
 import org.kajal.mallick.model.ProjectDto;
 import org.kajal.mallick.model.request.ProjectRequest;
@@ -60,7 +60,7 @@ public class ProjectServiceImpl implements ProjectService {
         BaseResponse baseResponse;
 
         if (projectId <= 0) {
-            throw new ProjectException("ProjectId should not be less than 1");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "ProjectId should not be less than 1");
         }
 
         Project project = projectFacade.findByProjectId(projectId);
@@ -95,7 +95,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public BaseResponse updateProject(ProjectRequest projectRequest) {
         if (projectRequest.getProjectId() <= 0) {
-            throw new ProjectException("ProjectId should not be less than 1");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "ProjectId should not be less than 1");
         }
 
         int rowUpdated = projectFacade.updateProject(projectRequest);
@@ -105,7 +105,41 @@ public class ProjectServiceImpl implements ProjectService {
             return new BaseResponse(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), "Project updated successfully");
         } else {
             logger.info("Unable to updated the project :{}", projectRequest.getProjectName());
-            return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to updated task");
+            return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to updated project");
+        }
+    }
+
+    @Override
+    public BaseResponse suspendProject(long projectId) {
+        if (projectId <= 0) {
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "ProjectId should not be less than 1");
+        }
+
+        int rowUpdated = projectFacade.suspendProject(projectId);
+
+        if (rowUpdated > 0) {
+            logger.info("Project suspended successfully :{}", projectId);
+            return new BaseResponse(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), "Project suspended successfully");
+        } else {
+            logger.info("Unable to suspend the project :{}", projectId);
+            return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to suspended project");
+        }
+    }
+
+    @Override
+    public BaseResponse activateProject(long projectId) {
+        if (projectId <= 0) {
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "ProjectId should not be less than 1");
+        }
+
+        int rowUpdated = projectFacade.activateProject(projectId);
+
+        if (rowUpdated > 0) {
+            logger.info("Project activated successfully :{}", projectId);
+            return new BaseResponse(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), "Project activated successfully");
+        } else {
+            logger.info("Unable to activated the project :{}", projectId);
+            return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to activated project");
         }
     }
 

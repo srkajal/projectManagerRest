@@ -38,7 +38,7 @@ class RestResponseEntityExceptionHandler
 
         ErrorResponse error = new ErrorResponse();
         error.setStatus(HttpStatus.BAD_REQUEST);
-        error.setMessage(ex.getMessage());
+        error.setErrorMessage(ex.getMessage());
         error.setErrors(errors);
         return handleExceptionInternal(
                 ex, error, headers, error.getStatus(), request);
@@ -99,9 +99,10 @@ class RestResponseEntityExceptionHandler
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler({TaskException.class, UserException.class, ProjectException.class})
-    public ResponseEntity<ErrorResponse> exceptionHandler(RuntimeException ex) {
+    @ExceptionHandler({BaseException.class})
+    public ResponseEntity<ErrorResponse> exceptionHandler(BaseException ex) {
         ErrorResponse error = new ErrorResponse(HttpStatus.PRECONDITION_FAILED, ex.getMessage(), "Error occurred");
+        //BaseResponse baseResponse = new BaseResponse(ex);
         return new ResponseEntity<>(error, HttpStatus.OK);
     }
 

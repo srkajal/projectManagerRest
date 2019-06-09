@@ -1,5 +1,6 @@
 package org.kajal.mallick.exception;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
@@ -7,15 +8,16 @@ import java.util.List;
 
 class ErrorResponse {
     private HttpStatus status;
-    private String message;
+    @JsonProperty("error_message")
+    private String errorMessage;
     private List<String> errors;
 
     public ErrorResponse() {
     }
 
-    public ErrorResponse(HttpStatus status, String message, List<String> errors) {
+    public ErrorResponse(HttpStatus status, String errorMessage, List<String> errors) {
         this.status = status;
-        this.message = message;
+        this.errorMessage = errorMessage;
         this.errors = errors;
     }
 
@@ -31,12 +33,12 @@ class ErrorResponse {
         this.status = status;
     }
 
-    public String getMessage() {
-        return message;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public List<String> getErrors() {

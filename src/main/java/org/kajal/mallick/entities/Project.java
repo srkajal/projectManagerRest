@@ -16,6 +16,8 @@ public class Project implements Serializable {
     private LocalDate endDate;
     private int priority;
     private List<Task> tasks;
+    private User user;
+    private String status;
 
     public Project() {
     }
@@ -29,6 +31,11 @@ public class Project implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.priority = priority;
+    }
+
+    public Project(String projectName, LocalDate startDate, LocalDate endDate, int priority, String status) {
+        this(projectName, startDate, endDate, priority);
+        this.status = status;
     }
 
     public Project(long projectId, String projectName, LocalDate startDate, LocalDate endDate, int priority) {
@@ -91,6 +98,23 @@ public class Project implements Serializable {
         this.tasks = tasks;
     }
 
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "project")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -117,6 +141,8 @@ public class Project implements Serializable {
                 ", endDate=" + endDate +
                 ", priority=" + priority +
                 ", tasks=" + tasks +
+                ", user=" + user +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

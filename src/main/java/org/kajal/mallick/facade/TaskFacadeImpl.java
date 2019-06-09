@@ -6,10 +6,11 @@ import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Project;
 import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.entities.User;
-import org.kajal.mallick.exception.ProjectException;
+import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.model.request.ParentTaskRequest;
 import org.kajal.mallick.model.request.TaskRequest;
-import org.kajal.mallick.util.TaskManagerConstant;
+import org.kajal.mallick.util.ProjectManagerConstant;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,13 +52,13 @@ public class TaskFacadeImpl implements TaskFacade {
         User user = userDao.findByUserId(taskRequest.getUserId());
 
         if (user == null) {
-            throw new ProjectException("User does not exist");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "User does not exist");
         }
 
         Project project = new Project(taskRequest.getProjectId());
 
         if (user.getTask() == null) {
-            Task task = new Task(parentTask, project, taskRequest.getTaskName(), taskRequest.getStartDate(), taskRequest.getEndDate(), taskRequest.getPriority(), TaskManagerConstant.STATUS_OPEN);
+            Task task = new Task(parentTask, project, taskRequest.getTaskName(), taskRequest.getStartDate(), taskRequest.getEndDate(), taskRequest.getPriority(), ProjectManagerConstant.STATUS_OPEN);
 
             Task savedTask = taskDao.saveTask(task);
 
@@ -65,7 +66,7 @@ public class TaskFacadeImpl implements TaskFacade {
 
             return savedTask;
         } else {
-            throw new ProjectException("User already have a task");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "User already have a task");
         }
     }
 
@@ -76,7 +77,7 @@ public class TaskFacadeImpl implements TaskFacade {
 
     @Override
     public int closeTaskById(long taskId) {
-        return taskDao.updateTaskStatus(TaskManagerConstant.STATUS_CLOSED, taskId);
+        return taskDao.updateTaskStatus(ProjectManagerConstant.STATUS_CLOSED, taskId);
     }
 
     @Override

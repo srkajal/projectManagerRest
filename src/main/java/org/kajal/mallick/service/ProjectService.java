@@ -14,5 +14,9 @@ public interface ProjectService {
 
     BaseResponse updateProject(ProjectRequest projectRequest);
 
+    BaseResponse suspendProject(long projectId);
+
+    BaseResponse activateProject(long projectId);
+
     BaseResponse deleteProject(long projectId);
 }

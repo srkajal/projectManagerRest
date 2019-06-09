@@ -41,6 +41,12 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    @Transactional
+    public int updateProjectStatus(String status, long projectId) {
+        return projectRepository.updateProjectStatus(status, projectId);
+    }
+
+    @Override
     public void deleteProject(long projectId) {
         projectRepository.deleteById(projectId);
     }

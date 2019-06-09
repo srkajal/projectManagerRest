@@ -2,7 +2,7 @@ package org.kajal.mallick.service;
 
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
-import org.kajal.mallick.exception.TaskException;
+import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.facade.TaskFacade;
 import org.kajal.mallick.model.ParentTaskDto;
 import org.kajal.mallick.model.TaskDto;
@@ -12,7 +12,7 @@ import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ParentTaskListResponse;
 import org.kajal.mallick.model.response.TaskListResponse;
 import org.kajal.mallick.model.response.TaskResponse;
-import org.kajal.mallick.util.TaskManagerConstant;
+import org.kajal.mallick.util.ProjectManagerConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +36,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskListResponse findAllTasks() {
         List<Task> taskList = taskFacade.findAllTasks();
-        return generateTasksResponseByList(taskList, TaskManagerConstant.TASKS_SUCCESS_MESSAGE, TaskManagerConstant.TASKS_FAILURE_MESSAGE);
+        return generateTasksResponseByList(taskList, ProjectManagerConstant.TASKS_SUCCESS_MESSAGE, ProjectManagerConstant.TASKS_FAILURE_MESSAGE);
     }
 
     @Override
     public TaskListResponse findAllByProjectId(long projectId) {
         List<Task> taskList = taskFacade.findAllByProjectId(projectId);
-        return generateTasksResponseByList(taskList, TaskManagerConstant.TASKS_SUCCESS_MESSAGE, TaskManagerConstant.TASKS_FAILURE_MESSAGE);
+        return generateTasksResponseByList(taskList, ProjectManagerConstant.TASKS_SUCCESS_MESSAGE, ProjectManagerConstant.TASKS_FAILURE_MESSAGE);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class TaskServiceImpl implements TaskService {
         BaseResponse baseResponse;
 
         if (taskId <= 0) {
-            throw new TaskException("TaskId should not be less than 1");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "TaskId should not be less than 1");
         }
 
         Task task = taskFacade.findTaskById(taskId);
@@ -88,7 +88,7 @@ public class TaskServiceImpl implements TaskService {
     public BaseResponse update(TaskRequest taskRequest) {
 
         if (taskRequest.getTaskId() <= 0) {
-            throw new TaskException("TaskId should not be less than 1");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "TaskId should not be less than 1");
         }
 
         int rowUpdated = taskFacade.update(taskRequest);
@@ -106,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
     public BaseResponse closeTaskById(long taskId) {
         int rowUpdated;
         if (taskId <= 0) {
-            throw new TaskException("TaskId should not be less than 1");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "TaskId should not be less than 1");
         }
 
         try {

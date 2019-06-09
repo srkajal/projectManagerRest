@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     static final String UPDATE_PROJECT_DETAILS = "update Project p set p.projectName = :projectName, p.startDate = :startDate, p.endDate = :endDate, p.priority = :priority where p.projectId = :projectId";
+    static final String UPDATE_PROJECT_STATUS = "update Project p set p.status = :status where p.projectId = :projectId";
     //static final String FIND_ALL_PROJECTS_WITH_TASKS = "SELECT p, p.tasks FROM Project p LEFT JOIN FETCH p.tasks";
     static final String FIND_PROJECT_BY_PROJECT_ID_WITH_TASKS = "SELECT p FROM Project p LEFT JOIN FETCH p.tasks WHERE p.projectId = :projectId";
 
@@ -26,4 +27,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query(UPDATE_PROJECT_DETAILS)
     @Modifying
     int updateProjectDetails(@Param("projectName") String projectName, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("priority") int priority, @Param("projectId") long projectId);
+
+    @Query(UPDATE_PROJECT_STATUS)
+    @Modifying
+    int updateProjectStatus(@Param("status") String status, @Param("projectId") long projectId);
 }

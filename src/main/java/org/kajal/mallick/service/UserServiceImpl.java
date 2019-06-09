@@ -1,14 +1,14 @@
 package org.kajal.mallick.service;
 
 import org.kajal.mallick.entities.User;
-import org.kajal.mallick.exception.UserException;
+import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.facade.UserFacade;
 import org.kajal.mallick.model.UserDto;
 import org.kajal.mallick.model.request.UserRequest;
 import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.UserListResponse;
 import org.kajal.mallick.model.response.UserResponse;
-import org.kajal.mallick.util.TaskManagerConstant;
+import org.kajal.mallick.util.ProjectManagerConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,21 +33,21 @@ public class UserServiceImpl implements UserService {
     public UserListResponse findAllUsers() {
         List<User> userList = userFacade.findAllUsers();
 
-        return generateUsersResponseFromList(userList, TaskManagerConstant.USERS_SUCCESS_MESSAGE, TaskManagerConstant.USERS_FAILURE_MESSAGE);
+        return generateUsersResponseFromList(userList, ProjectManagerConstant.USERS_SUCCESS_MESSAGE, ProjectManagerConstant.USERS_FAILURE_MESSAGE);
     }
 
     @Override
     public UserListResponse findUsersWithNoProject() {
         List<User> userList = userFacade.findUsersWithNoProject();
 
-        return generateUsersResponseFromList(userList, TaskManagerConstant.USERS_SUCCESS_MESSAGE, TaskManagerConstant.USERS_FAILURE_MESSAGE);
+        return generateUsersResponseFromList(userList, ProjectManagerConstant.USERS_SUCCESS_MESSAGE, ProjectManagerConstant.USERS_FAILURE_MESSAGE);
     }
 
     @Override
     public UserListResponse findUsersWithNoTask() {
         List<User> userList = userFacade.findUsersWithNoTask();
 
-        return generateUsersResponseFromList(userList, TaskManagerConstant.USERS_SUCCESS_MESSAGE, TaskManagerConstant.USERS_FAILURE_MESSAGE);
+        return generateUsersResponseFromList(userList, ProjectManagerConstant.USERS_SUCCESS_MESSAGE, ProjectManagerConstant.USERS_FAILURE_MESSAGE);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         BaseResponse baseResponse;
 
         if (userId <= 0) {
-            throw new UserException("UserId should not be less than 1");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "UserId should not be less than 1");
         }
 
         User user = userFacade.findByUserId(userId);
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         BaseResponse baseResponse;
 
         if (userRequest.getUserId() <= 0) {
-            throw new UserException("UserId should not be less than 1");
+            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "UserId should not be less than 1");
         }
 
         int rowUpdated = userFacade.updateUserDetails(userRequest);

@@ -9,7 +9,7 @@ import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.repositories.ParentTaskRepository;
 import org.kajal.mallick.repositories.TaskRepository;
-import org.kajal.mallick.util.TaskManagerConstant;
+import org.kajal.mallick.util.ProjectManagerConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -79,7 +79,7 @@ public class TaskDaoImplIntegrationTest {
         Task task = new Task();
         task.setTaskName(TASK_NAME);
         task.setPriority(1);
-        task.setStatus(TaskManagerConstant.STATUS_OPEN);
+        task.setStatus(ProjectManagerConstant.STATUS_OPEN);
         task.setEndDate(LocalDate.now());
         task.setEndDate(LocalDate.now());
         task.setParentTask(parentTask);
@@ -87,6 +87,6 @@ public class TaskDaoImplIntegrationTest {
 
         Task savedTask = taskRepository.save(task);
         Assert.assertNotNull(savedTask);
-        Assert.assertEquals(TaskManagerConstant.STATUS_OPEN, savedTask.getStatus());
+        Assert.assertEquals(ProjectManagerConstant.STATUS_OPEN, savedTask.getStatus());
     }
 }

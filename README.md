@@ -7,7 +7,7 @@ create table parent_task (parent_id int primary key not null auto_increment, par
 
 create table task (task_id int primary key not null auto_increment, task_name varchar(60) not null, priority int not null, start_date date not null, end_date date not null, status varchar(10) not null, parent_id int null, project_id int not null, FOREIGN KEY (parent_id) REFERENCES parent_task(parent_id), FOREIGN KEY (project_id) REFERENCES project(project_id) );
 
-create table project (project_id int primary key not null auto_increment, project_name varchar(60) not null, start_date date not null, end_date date not null, priority int not null);
+create table project (project_id int primary key not null auto_increment, project_name varchar(60) not null, start_date date not null, end_date date not null, priority int not null, status varchar(10) not null);
 
 create table user (user_id int primary key not null auto_increment, first_name varchar(60) not null, last_name varchar(60) not null, employee_id int not null, project_id int null, task_id int null, FOREIGN KEY (project_id) REFERENCES project(project_id), FOREIGN KEY (task_id) REFERENCES task(task_id));
 

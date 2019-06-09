@@ -14,5 +14,7 @@ public interface ProjectDao {
 
     int updateProjectDetails(String projectName, LocalDate startDate, LocalDate endDate, int priority, long projectId);
 
+    int updateProjectStatus(String status, long projectId);
+
     void deleteProject(long projectId);
 }
