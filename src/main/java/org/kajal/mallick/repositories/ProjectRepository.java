@@ -7,17 +7,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     static final String UPDATE_PROJECT_DETAILS = "update Project p set p.projectName = :projectName, p.startDate = :startDate, p.endDate = :endDate, p.priority = :priority where p.projectId = :projectId";
     static final String UPDATE_PROJECT_STATUS = "update Project p set p.status = :status where p.projectId = :projectId";
-    //static final String FIND_ALL_PROJECTS_WITH_TASKS = "SELECT p, p.tasks FROM Project p LEFT JOIN FETCH p.tasks";
+    static final String FIND_ALL_PROJECTS_WITH_TASKS = "SELECT p FROM Project p LEFT JOIN FETCH p.tasks";
     static final String FIND_PROJECT_BY_PROJECT_ID_WITH_TASKS = "SELECT p FROM Project p LEFT JOIN FETCH p.tasks WHERE p.projectId = :projectId";
 
 
-    /*@Query(FIND_ALL_PROJECTS_WITH_TASKS)
-    List<Project> findAllProjectsWithTasks();*/
+    @Query(FIND_ALL_PROJECTS_WITH_TASKS)
+    List<Project> findAllProjectsWithTasks();
+
+    List<Project> findAllByStatus(String status);
 
     @Query(FIND_PROJECT_BY_PROJECT_ID_WITH_TASKS)
     Optional<Project> findProjectByIdWithTasks(@Param("projectId") long id);

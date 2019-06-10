@@ -35,6 +35,11 @@ public class ProjectFacadeImpl implements ProjectFacade {
     }
 
     @Override
+    public List<Project> findAllActiveProjects() {
+        return projectDao.findAllByStatus(ProjectManagerConstant.STATUS_ACTIVE);
+    }
+
+    @Override
     public Project findByProjectId(long projectId) {
         return projectDao.findByProjectId(projectId);
     }

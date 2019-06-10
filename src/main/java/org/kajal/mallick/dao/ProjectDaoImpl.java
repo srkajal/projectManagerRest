@@ -25,6 +25,11 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    public List<Project> findAllByStatus(String status) {
+        return projectRepository.findAllByStatus(status);
+    }
+
+    @Override
     public Project findByProjectId(long projectId) {
         return projectRepository.findProjectByIdWithTasks(projectId).orElse(null);
     }

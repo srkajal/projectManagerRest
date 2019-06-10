@@ -8,6 +8,8 @@ import java.util.List;
 public interface ProjectDao {
     List<Project> findAllProjects();
 
+    List<Project> findAllByStatus(String status);
+
     Project findByProjectId(long projectId);
 
     Project save(Project project);

@@ -26,6 +26,11 @@ class ProjectController {
         return projectService.findAllProjects();
     }
 
+    @GetMapping(value = "/findAllActiveProjects")
+    ProjectListResponse findAllActiveProjects() {
+        return projectService.findAllActiveProjects();
+    }
+
     @GetMapping("/findProjectById/{projectId}")
     public ProjectResponse findProjectById(@PathVariable("projectId") long projectId) {
         return projectService.findByProjectId(projectId);

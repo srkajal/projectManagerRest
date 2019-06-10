@@ -55,6 +55,31 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public ProjectListResponse findAllActiveProjects() {
+        ProjectListResponse projectListResponse = new ProjectListResponse();
+        BaseResponse baseResponse;
+
+        List<Project> projectList = projectFacade.findAllActiveProjects();
+
+        if (!CollectionUtils.isEmpty(projectList)) {
+            projectList
+                    .forEach(project -> projectListResponse
+                            .getProjects()
+                            .add(new ProjectDto(project)));
+            baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Number of projects found " + projectList.size());
+
+            logger.info("Find number of project:{}", projectList.size());
+        } else {
+            baseResponse = new BaseResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND.value(), "No Project found");
+            logger.info("No Project found");
+        }
+
+        projectListResponse.setBaseResponse(baseResponse);
+
+        return projectListResponse;
+    }
+
+    @Override
     public ProjectResponse findByProjectId(long projectId) {
         ProjectResponse projectResponse = new ProjectResponse();
         BaseResponse baseResponse;

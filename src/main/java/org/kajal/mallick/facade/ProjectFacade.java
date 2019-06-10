@@ -8,6 +8,8 @@ import java.util.List;
 public interface ProjectFacade {
     List<Project> findAllProjects();
 
+    List<Project> findAllActiveProjects();
+
     Project findByProjectId(long projectId);
 
     Project saveProject(ProjectRequest projectRequest);

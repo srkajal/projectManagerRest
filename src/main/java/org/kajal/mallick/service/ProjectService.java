@@ -8,6 +8,8 @@ import org.kajal.mallick.model.response.ProjectResponse;
 public interface ProjectService {
     ProjectListResponse findAllProjects();
 
+    ProjectListResponse findAllActiveProjects();
+
     ProjectResponse findByProjectId(long projectId);
 
     BaseResponse createProject(ProjectRequest projectRequest);
