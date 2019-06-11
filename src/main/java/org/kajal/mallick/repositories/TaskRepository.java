@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     static final String FIND_ALL_TASKS = "SELECT t FROM Task t LEFT JOIN FETCH t.parentTask";
-    static final String FIND_TASK_TASK_ID = "SELECT t FROM Task t LEFT JOIN FETCH t.parentTask WHERE t.taskId = :taskId";
+    static final String FIND_TASK_TASK_ID = "SELECT t FROM Task t LEFT JOIN FETCH t.parentTask JOIN t.project p JOIN t.user u WHERE t.taskId = :taskId";
     static final String FIND_ALL_TASK_BY_PROJECT_ID = "SELECT t FROM Task t LEFT JOIN FETCH t.parentTask JOIN t.project p WHERE p.projectId = :projectId";
     static final String UPDATE_TASK_STATUS = "update Task t set t.status = :status where t.taskId = :taskId";
     static final String UPDATE_TASK_DETAILS = "update Task t set t.taskName = :taskName, t.startDate = :startDate, t.endDate = :endDate, t.priority = :priority, t.parentTask.parentId = :parentId, t.project.projectId = :projectId where t.taskId = :taskId";

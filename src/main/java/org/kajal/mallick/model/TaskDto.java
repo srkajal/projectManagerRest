@@ -18,6 +18,10 @@ public class TaskDto implements Serializable {
     private String status;
     @JsonProperty("parent_task")
     private ParentTaskDto parentTaskDto;
+    @JsonProperty("project_id")
+    private long projectId;
+    @JsonProperty("user_id")
+    private long userId;
 
     public TaskDto(Task task) {
         this.taskId = task.getTaskId();
@@ -26,10 +30,13 @@ public class TaskDto implements Serializable {
         this.endDate = String.valueOf(task.getEndDate());
         this.priority = task.getPriority();
         this.status = task.getStatus();
+        this.projectId = task.getProject().getProjectId();
+        this.userId = task.getUser().getUserId();
 
         if (task.getParentTask() != null) {
             this.parentTaskDto = new ParentTaskDto(task.getParentTask().getParentId(), task.getParentTask().getParentTaskName());
         }
+
     }
 
     public TaskDto() {
@@ -89,5 +96,21 @@ public class TaskDto implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

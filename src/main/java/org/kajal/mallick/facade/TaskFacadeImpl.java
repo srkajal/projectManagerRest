@@ -55,11 +55,6 @@ public class TaskFacadeImpl implements TaskFacade {
             throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "User does not exist");
         }
 
-        if (user.getTask() != null) {
-            throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "User already have a task");
-
-        }
-
         Project project = new Project(taskRequest.getProjectId());
 
         if (user.getTask() == null) {

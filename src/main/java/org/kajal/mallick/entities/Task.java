@@ -12,6 +12,7 @@ public class Task implements Serializable {
     private long taskId;
     private ParentTask parentTask;
     private Project project;
+    private User user;
     private String taskName;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -65,6 +66,15 @@ public class Task implements Serializable {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "task")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Column(name = "task_name")
