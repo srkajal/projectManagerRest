@@ -27,8 +27,8 @@ public class ErrorResponseTest {
 
     @Test
     public void getMessage() {
-        errorResponse.setMessage("message1");
-        assertEquals("message1", errorResponse.getMessage());
+        errorResponse.setErrorMessage("message1");
+        assertEquals("message1", errorResponse.getErrorMessage());
     }
 
     @Test
