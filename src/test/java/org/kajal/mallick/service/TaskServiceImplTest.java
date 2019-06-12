@@ -4,7 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.kajal.mallick.entities.ParentTask;
+import org.kajal.mallick.entities.Project;
 import org.kajal.mallick.entities.Task;
+import org.kajal.mallick.entities.User;
 import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.facade.TaskFacade;
 import org.kajal.mallick.model.request.ParentTaskRequest;
@@ -40,18 +42,14 @@ public class TaskServiceImplTest {
     public void setUp() throws Exception {
         initMocks(this);
 
-        parentTask = new ParentTask();
+        parentTask = new ParentTask(1);
         parentTask.setParentTaskName(TASK_NAME);
-        parentTask.setParentId(1);
 
-        task = new Task();
-        task.setTaskName(TASK_NAME);
-        task.setTaskId(1);
-        task.setPriority(1);
-        task.setStatus(ProjectManagerConstant.STATUS_OPEN);
-        task.setEndDate(LocalDate.now());
-        task.setEndDate(LocalDate.now());
-        task.setParentTask(parentTask);
+        User user = new User(3l);
+
+        task = new Task(1, parentTask, new Project(3l), TASK_NAME, LocalDate.now(), LocalDate.now(), 1, ProjectManagerConstant.STATUS_OPEN);
+        task.setUser(user);
+
     }
 
     @Test

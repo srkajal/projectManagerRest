@@ -89,6 +89,7 @@ public class ProjectFacadeImplTest {
     @Test
     public void updateProject() {
         when(projectDao.updateProjectDetails(anyString(), any(LocalDate.class), any(LocalDate.class), anyInt(), anyLong())).thenReturn(1);
+        when(userDao.findByUserId(anyLong())).thenReturn(new User(1l));
 
         ProjectRequest projectRequest = new ProjectRequest();
 

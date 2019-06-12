@@ -91,14 +91,17 @@ public class BaseDataTest {
                 String[] fieldArray = newLine.split(separator);
 
                 ParentTask parentTask1 = new ParentTask(lineNumber + 4);
-                parentTask1.setParentTaskName("PartentTask - " + (lineNumber + 5));
+                parentTask1.setParentTaskName("ParentTask - " + (lineNumber + 5));
                 Task task1 = new Task();
                 task1.setTaskId(lineNumber + 1);
                 task1.setStatus("OPEN");
                 Project project = new Project(lineNumber + 2, "Project-" + (lineNumber + 4), LocalDate.now(), LocalDate.now(), lineNumber + 3);
                 project.setTasks(Collections.singletonList(task1));
 
-                User user = new User();
+                Project project2 = new Project(lineNumber + 5, "Project-" + (lineNumber + 6), LocalDate.now(), LocalDate.now(), lineNumber + 7);
+                User user1 = new User(lineNumber + 8);
+                task1.setProject(project2);
+                task1.setUser(user1);
 
                 objects[lineNumber][0] = new User(Long.valueOf(fieldArray[0]), fieldArray[1], fieldArray[2], Integer.valueOf(fieldArray[3]), project, task1);
                 lineNumber++;

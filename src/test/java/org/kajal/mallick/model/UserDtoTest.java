@@ -68,12 +68,13 @@ public class UserDtoTest {
     @Test
     public void getUserDtoByUser() {
 
-        Project project = new Project();
-        project.setProjectId(6l);
+        Project project = new Project(6l);
 
         Task task = new Task();
         task.setTaskId(7l);
         task.setStatus("OPEN");
+        task.setProject(new Project(9l));
+        task.setUser(new User(10l));
 
         project.setTasks(Collections.singletonList(task));
 
