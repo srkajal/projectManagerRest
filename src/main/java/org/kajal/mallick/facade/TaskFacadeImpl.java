@@ -7,8 +7,9 @@ import org.kajal.mallick.entities.Project;
 import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.entities.User;
 import org.kajal.mallick.exception.BaseException;
+import org.kajal.mallick.model.request.CreateTaskRequest;
 import org.kajal.mallick.model.request.ParentTaskRequest;
-import org.kajal.mallick.model.request.TaskRequest;
+import org.kajal.mallick.model.request.UpdateTaskRequest;
 import org.kajal.mallick.util.ProjectManagerConstant;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -43,22 +44,22 @@ public class TaskFacadeImpl implements TaskFacade {
 
     @Override
     @Transactional
-    public Task saveTask(TaskRequest taskRequest) {
+    public Task saveTask(CreateTaskRequest createTaskRequest) {
         ParentTask parentTask = null;
-        if (taskRequest.getParentId() > 0) {
-            parentTask = new ParentTask(taskRequest.getParentId());
+        if (createTaskRequest.getParentId() > 0) {
+            parentTask = new ParentTask(createTaskRequest.getParentId());
         }
 
-        User user = userDao.findByUserId(taskRequest.getUserId());
+        User user = userDao.findByUserId(createTaskRequest.getUserId());
 
         if (user == null) {
             throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "User does not exist");
         }
 
-        Project project = new Project(taskRequest.getProjectId());
+        Project project = new Project(createTaskRequest.getProjectId());
 
         if (user.getTask() == null) {
-            Task task = new Task(parentTask, project, taskRequest.getTaskName(), taskRequest.getStartDate(), taskRequest.getEndDate(), taskRequest.getPriority(), ProjectManagerConstant.STATUS_OPEN);
+            Task task = new Task(parentTask, project, createTaskRequest.getTaskName(), createTaskRequest.getStartDate(), createTaskRequest.getEndDate(), createTaskRequest.getPriority(), ProjectManagerConstant.STATUS_OPEN);
 
             Task savedTask = taskDao.saveTask(task);
 
@@ -71,8 +72,13 @@ public class TaskFacadeImpl implements TaskFacade {
     }
 
     @Override
-    public int update(TaskRequest taskRequest) {
-        return taskDao.updateTaskDetails(taskRequest.getTaskName(), taskRequest.getStartDate(), taskRequest.getEndDate(), taskRequest.getPriority(), taskRequest.getParentId(), taskRequest.getProjectId(), taskRequest.getTaskId());
+    public int update(UpdateTaskRequest updateTaskRequest) {
+        Long parentId = null;
+
+        if (updateTaskRequest.getParentId() != 0) {
+            parentId = updateTaskRequest.getParentId();
+        }
+        return taskDao.updateTaskDetails(updateTaskRequest.getTaskName(), updateTaskRequest.getStartDate(), updateTaskRequest.getEndDate(), updateTaskRequest.getPriority(), parentId, updateTaskRequest.getTaskId());
     }
 
     @Override

@@ -8,16 +8,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-public class TaskRequest {
+public class UpdateTaskRequest {
+    @Min(value = 1, message = "Task Id should be greater than 0")
     @JsonProperty("task_id")
     private long taskId;
 
     @JsonProperty("parent_id")
     private long parentId;
-
-    @Min(value = 1, message = "Project Id should be greater than 0")
-    @JsonProperty("project_id")
-    private long projectId;
 
     @NotNull(message = "Task should not be Blank")
     @NotEmpty(message = "Task should not be Blank")
@@ -37,17 +34,12 @@ public class TaskRequest {
     @Min(value = 1, message = "Priority should be greater than 0")
     private int priority;
 
-    @JsonProperty("user_id")
-    @Min(value = 1, message = "User id should be greater than 0")
-    private long userId;
-
-    public TaskRequest() {
+    public UpdateTaskRequest() {
     }
 
-    public TaskRequest(long taskId, long parentId, @Min(value = 1, message = "Project Id should be greater than 0") long projectId, @NotNull(message = "Task should not be Blank") @NotEmpty(message = "Task should not be Blank") String taskName, @NotNull(message = "Start date should not be Blank") LocalDate startDate, @NotNull(message = "End date should not be Blank") LocalDate endDate, @Min(value = 1, message = "Priority should be greater than 0") int priority) {
+    public UpdateTaskRequest(@Min(value = 1, message = "Task Id should be greater than 0") long taskId, long parentId, @NotNull(message = "Task should not be Blank") @NotEmpty(message = "Task should not be Blank") String taskName, @NotNull(message = "Start date should not be Blank") LocalDate startDate, @NotNull(message = "End date should not be Blank") LocalDate endDate, @Min(value = 1, message = "Priority should be greater than 0") int priority) {
         this.taskId = taskId;
         this.parentId = parentId;
-        this.projectId = projectId;
         this.taskName = taskName;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -68,14 +60,6 @@ public class TaskRequest {
 
     public void setParentId(long parentId) {
         this.parentId = parentId;
-    }
-
-    public long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
     }
 
     public String getTaskName() {
@@ -108,13 +92,5 @@ public class TaskRequest {
 
     public void setPriority(int priority) {
         this.priority = priority;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 }

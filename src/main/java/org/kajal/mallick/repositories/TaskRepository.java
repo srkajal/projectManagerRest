@@ -15,7 +15,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     static final String FIND_TASK_TASK_ID = "SELECT t FROM Task t LEFT JOIN FETCH t.parentTask JOIN t.project p JOIN t.user u WHERE t.taskId = :taskId";
     static final String FIND_ALL_TASK_BY_PROJECT_ID = "SELECT t FROM Task t LEFT JOIN FETCH t.parentTask JOIN t.project p WHERE p.projectId = :projectId";
     static final String UPDATE_TASK_STATUS = "update Task t set t.status = :status where t.taskId = :taskId";
-    static final String UPDATE_TASK_DETAILS = "update Task t set t.taskName = :taskName, t.startDate = :startDate, t.endDate = :endDate, t.priority = :priority, t.parentTask.parentId = :parentId, t.project.projectId = :projectId where t.taskId = :taskId";
+    static final String UPDATE_TASK_DETAILS = "update Task t set t.taskName = :taskName, t.startDate = :startDate, t.endDate = :endDate, t.priority = :priority, t.parentTask.parentId = :parentId where t.taskId = :taskId";
     static final String DELETE_TASKS_BY_IDS = "DELETE FROM Task t WHERE t.taskId IN :taskIds";
 
     @Query(FIND_ALL_TASKS)
@@ -35,9 +35,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Modifying
     @Query(UPDATE_TASK_DETAILS)
-    int updateTaskDetails(@Param("taskName") String taskName, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("priority") int priority, @Param("parentId") long parentId, @Param("projectId") long projectId, @Param("taskId") long taskId);
+    int updateTaskDetails(@Param("taskName") String taskName, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("priority") int priority, @Param("parentId") Long parentId, @Param("taskId") long taskId);
 
     @Modifying
     @Query(DELETE_TASKS_BY_IDS)
-    void deleteTaksByIds(@Param("taskIds") List<Long> taskIds);
+    void deleteTasksByIds(@Param("taskIds") List<Long> taskIds);
 }

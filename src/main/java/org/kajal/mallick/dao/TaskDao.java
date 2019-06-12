@@ -22,7 +22,7 @@ public interface TaskDao {
 
     ParentTask saveParentTask(ParentTask parentTask);
 
-    int updateTaskDetails(String taskName, LocalDate startDate, LocalDate endDate, int priority, long parentId, long projectId, long taskId);
+    int updateTaskDetails(String taskName, LocalDate startDate, LocalDate endDate, int priority, Long parentId, long taskId);
 
     void deleteTasksByIds(List<Long> taskIds);
 }

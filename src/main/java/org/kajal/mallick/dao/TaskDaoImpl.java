@@ -62,12 +62,12 @@ public class TaskDaoImpl implements TaskDao {
     }
 
     @Override
-    public int updateTaskDetails(String taskName, LocalDate startDate, LocalDate endDate, int priority, long parentId, long projectId, long taskId) {
-        return taskRepository.updateTaskDetails(taskName, startDate, endDate, priority, parentId, projectId, taskId);
+    public int updateTaskDetails(String taskName, LocalDate startDate, LocalDate endDate, int priority, Long parentId, long taskId) {
+        return taskRepository.updateTaskDetails(taskName, startDate, endDate, priority, parentId, taskId);
     }
 
     @Override
     public void deleteTasksByIds(List<Long> taskIds) {
-        taskRepository.deleteTaksByIds(taskIds);
+        taskRepository.deleteTasksByIds(taskIds);
     }
 }

@@ -6,8 +6,9 @@ import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.facade.TaskFacade;
 import org.kajal.mallick.model.ParentTaskDto;
 import org.kajal.mallick.model.TaskDto;
+import org.kajal.mallick.model.request.CreateTaskRequest;
 import org.kajal.mallick.model.request.ParentTaskRequest;
-import org.kajal.mallick.model.request.TaskRequest;
+import org.kajal.mallick.model.request.UpdateTaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ParentTaskListResponse;
 import org.kajal.mallick.model.response.TaskListResponse;
@@ -71,33 +72,33 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public BaseResponse saveTask(TaskRequest taskRequest) {
+    public BaseResponse saveTask(CreateTaskRequest createTaskRequest) {
 
-        Task savedTask = taskFacade.saveTask(taskRequest);
+        Task savedTask = taskFacade.saveTask(createTaskRequest);
 
         if (savedTask != null) {
-            logger.info("Task saved successfully :{}", taskRequest.getTaskName());
+            logger.info("Task saved successfully :{}", createTaskRequest.getTaskName());
             return new BaseResponse(HttpStatus.CREATED.getReasonPhrase(), HttpStatus.CREATED.value(), "Task saved successfully");
         } else {
-            logger.info("Unable to save the task :{}", taskRequest.getTaskName());
+            logger.info("Unable to save the task :{}", createTaskRequest.getTaskName());
             return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to save task");
         }
     }
 
     @Override
-    public BaseResponse update(TaskRequest taskRequest) {
+    public BaseResponse update(UpdateTaskRequest updateTaskRequest) {
 
-        if (taskRequest.getTaskId() <= 0) {
+        if (updateTaskRequest.getTaskId() <= 0) {
             throw new BaseException(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase(), HttpStatus.NOT_ACCEPTABLE.value(), "TaskId should not be less than 1");
         }
 
-        int rowUpdated = taskFacade.update(taskRequest);
+        int rowUpdated = taskFacade.update(updateTaskRequest);
 
         if (rowUpdated > 0) {
-            logger.info("Task updated successfully :{}", taskRequest.getTaskName());
+            logger.info("Task updated successfully :{}", updateTaskRequest.getTaskName());
             return new BaseResponse(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK.value(), "Task updated successfully");
         } else {
-            logger.info("Unable to update the task :{}", taskRequest.getTaskName());
+            logger.info("Unable to update the task :{}", updateTaskRequest.getTaskName());
             return new BaseResponse(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Failed to update task");
         }
     }

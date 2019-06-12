@@ -8,8 +8,9 @@ import org.kajal.mallick.dao.UserDao;
 import org.kajal.mallick.entities.ParentTask;
 import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.entities.User;
+import org.kajal.mallick.model.request.CreateTaskRequest;
 import org.kajal.mallick.model.request.ParentTaskRequest;
-import org.kajal.mallick.model.request.TaskRequest;
+import org.kajal.mallick.model.request.UpdateTaskRequest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -69,7 +70,7 @@ public class TaskFacadeImplTest {
         when(taskDao.saveTask(any(Task.class))).thenReturn(task);
         when(userDao.findByUserId(anyLong())).thenReturn(new User());
         when(userDao.updateTask(anyLong(), anyLong())).thenReturn(1);
-        Task savedTask = taskManagerFacade.saveTask(new TaskRequest());
+        Task savedTask = taskManagerFacade.saveTask(new CreateTaskRequest());
 
         Assert.assertNotNull(savedTask);
         Assert.assertEquals(TASK_NAME, savedTask.getTaskName());
@@ -77,9 +78,9 @@ public class TaskFacadeImplTest {
 
     @Test
     public void update() {
-        TaskRequest taskRequest = new TaskRequest(1l, 2l, 3l, "Task", LocalDate.now(), LocalDate.now(), 3);
-        when(taskDao.updateTaskDetails(anyString(), any(LocalDate.class), any(LocalDate.class), anyInt(), anyLong(), anyLong(), anyLong())).thenReturn(1);
-        int rowUpdated = taskManagerFacade.update(taskRequest);
+        UpdateTaskRequest updateTaskRequest = new UpdateTaskRequest(1l, 2l, "Task", LocalDate.now(), LocalDate.now(), 3);
+        when(taskDao.updateTaskDetails(anyString(), any(LocalDate.class), any(LocalDate.class), anyInt(), anyLong(), anyLong())).thenReturn(1);
+        int rowUpdated = taskManagerFacade.update(updateTaskRequest);
 
         Assert.assertTrue(rowUpdated > 0);
     }

@@ -9,8 +9,9 @@ import org.kajal.mallick.entities.Task;
 import org.kajal.mallick.entities.User;
 import org.kajal.mallick.exception.BaseException;
 import org.kajal.mallick.facade.TaskFacade;
+import org.kajal.mallick.model.request.CreateTaskRequest;
 import org.kajal.mallick.model.request.ParentTaskRequest;
-import org.kajal.mallick.model.request.TaskRequest;
+import org.kajal.mallick.model.request.UpdateTaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ParentTaskListResponse;
 import org.kajal.mallick.model.response.TaskListResponse;
@@ -88,16 +89,16 @@ public class TaskServiceImplTest {
 
     @Test
     public void saveTask() {
-        when(taskFacade.saveTask(any(TaskRequest.class))).thenReturn(task);
-        BaseResponse baseResponse = taskManagerService.saveTask(new TaskRequest());
+        when(taskFacade.saveTask(any(CreateTaskRequest.class))).thenReturn(task);
+        BaseResponse baseResponse = taskManagerService.saveTask(new CreateTaskRequest());
 
         Assert.assertEquals(HttpStatus.CREATED.getReasonPhrase(), baseResponse.getStatus());
     }
 
     @Test
     public void saveTaskUnableToSave() {
-        when(taskFacade.saveTask(any(TaskRequest.class))).thenReturn(null);
-        BaseResponse baseResponse = taskManagerService.saveTask(new TaskRequest());
+        when(taskFacade.saveTask(any(CreateTaskRequest.class))).thenReturn(null);
+        BaseResponse baseResponse = taskManagerService.saveTask(new CreateTaskRequest());
 
         Assert.assertNotNull(task);
         Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), baseResponse.getStatus());
@@ -105,19 +106,19 @@ public class TaskServiceImplTest {
 
     @Test
     public void update() {
-        TaskRequest taskRequest = new TaskRequest(1l, 2l, 3l, "Task", LocalDate.now(), LocalDate.now(), 3);
-        when(taskFacade.update(any(TaskRequest.class))).thenReturn(1);
-        BaseResponse baseResponse = taskManagerService.update(taskRequest);
+        UpdateTaskRequest updateTaskRequest = new UpdateTaskRequest(1l, 2l, "Task", LocalDate.now(), LocalDate.now(), 3);
+        when(taskFacade.update(any(UpdateTaskRequest.class))).thenReturn(1);
+        BaseResponse baseResponse = taskManagerService.update(updateTaskRequest);
 
         Assert.assertEquals(HttpStatus.OK.getReasonPhrase(), baseResponse.getStatus());
     }
 
     @Test
     public void updateUnableToUpdate() {
-        TaskRequest taskRequest = new TaskRequest();
-        taskRequest.setTaskId(1);
-        when(taskFacade.update(any(TaskRequest.class))).thenReturn(0);
-        BaseResponse baseResponse = taskManagerService.update(taskRequest);
+        UpdateTaskRequest updateTaskRequest = new UpdateTaskRequest();
+        updateTaskRequest.setTaskId(1);
+        when(taskFacade.update(any(UpdateTaskRequest.class))).thenReturn(0);
+        BaseResponse baseResponse = taskManagerService.update(updateTaskRequest);
 
         Assert.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), baseResponse.getStatus());
     }

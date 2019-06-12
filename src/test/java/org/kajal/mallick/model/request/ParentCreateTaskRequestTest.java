@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class ParentTaskRequestTest {
+public class ParentCreateTaskRequestTest {
 
     private ParentTaskRequest parentTaskRequest;
 

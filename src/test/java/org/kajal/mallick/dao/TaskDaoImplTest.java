@@ -114,16 +114,16 @@ public class TaskDaoImplTest {
     @Test
     public void updateTaskDetails() {
 
-        when(taskRepository.updateTaskDetails(anyString(), any(LocalDate.class), any(LocalDate.class), anyInt(), anyLong(), anyLong(), anyLong())).thenReturn(1);
-        int number = taskManagerDao.updateTaskDetails(taskTestObject.getTaskName(), taskTestObject.getStartDate(), taskTestObject.getEndDate(), taskTestObject.getPriority(), taskTestObject.getParentTask().getParentId(), taskTestObject.getProject().getProjectId(), taskTestObject.getTaskId());
+        when(taskRepository.updateTaskDetails(anyString(), any(LocalDate.class), any(LocalDate.class), anyInt(), anyLong(), anyLong())).thenReturn(1);
+        int number = taskManagerDao.updateTaskDetails(taskTestObject.getTaskName(), taskTestObject.getStartDate(), taskTestObject.getEndDate(), taskTestObject.getPriority(), taskTestObject.getParentTask().getParentId(), taskTestObject.getTaskId());
 
         assertTrue(number > 0);
     }
 
     @Test
     public void deleteTasksByIds() {
-        doNothing().when(taskRepository).deleteTaksByIds(anyList());
+        doNothing().when(taskRepository).deleteTasksByIds(anyList());
         taskManagerDao.deleteTasksByIds(anyList());
-        verify(taskRepository, times(1)).deleteTaksByIds(anyList());
+        verify(taskRepository, times(1)).deleteTasksByIds(anyList());
     }
 }

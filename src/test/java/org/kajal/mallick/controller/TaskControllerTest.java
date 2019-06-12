@@ -6,8 +6,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kajal.mallick.model.ParentTaskDto;
 import org.kajal.mallick.model.TaskDto;
+import org.kajal.mallick.model.request.CreateTaskRequest;
 import org.kajal.mallick.model.request.ParentTaskRequest;
-import org.kajal.mallick.model.request.TaskRequest;
+import org.kajal.mallick.model.request.UpdateTaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ParentTaskListResponse;
 import org.kajal.mallick.model.response.TaskListResponse;
@@ -175,7 +176,7 @@ public class TaskControllerTest {
                 "    \"priority\": 5\n" +
                 "}";
 
-        when(taskService.saveTask(any(TaskRequest.class))).thenReturn(baseResponse);
+        when(taskService.saveTask(any(CreateTaskRequest.class))).thenReturn(baseResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(PATH + "createTask")
                 .accept(MediaType.APPLICATION_JSON)
@@ -187,7 +188,7 @@ public class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", org.hamcrest.Matchers.is(HttpStatus.CREATED.value())));
 
-        verify(taskService, times(1)).saveTask(any(TaskRequest.class));
+        verify(taskService, times(1)).saveTask(any(CreateTaskRequest.class));
     }
 
     @Test
@@ -204,7 +205,7 @@ public class TaskControllerTest {
                 "    \"priority\": 5\n" +
                 "}";
 
-        when(taskService.saveTask(any(TaskRequest.class))).thenReturn(baseResponse);
+        when(taskService.saveTask(any(CreateTaskRequest.class))).thenReturn(baseResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(PATH + "createTask")
                 .accept(MediaType.APPLICATION_JSON)
@@ -257,7 +258,7 @@ public class TaskControllerTest {
                 "    \"priority\": 1\n" +
                 "}";
 
-        when(taskService.update(any(TaskRequest.class))).thenReturn(baseResponse);
+        when(taskService.update(any(UpdateTaskRequest.class))).thenReturn(baseResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post(PATH + "updateTask")
                 .accept(MediaType.APPLICATION_JSON)
@@ -269,6 +270,6 @@ public class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", org.hamcrest.Matchers.is(HttpStatus.OK.value())));
 
-        verify(taskService, times(1)).update(any(TaskRequest.class));
+        verify(taskService, times(1)).update(any(UpdateTaskRequest.class));
     }
 }

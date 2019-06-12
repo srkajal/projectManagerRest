@@ -1,7 +1,8 @@
 package org.kajal.mallick.controller;
 
+import org.kajal.mallick.model.request.CreateTaskRequest;
 import org.kajal.mallick.model.request.ParentTaskRequest;
-import org.kajal.mallick.model.request.TaskRequest;
+import org.kajal.mallick.model.request.UpdateTaskRequest;
 import org.kajal.mallick.model.response.BaseResponse;
 import org.kajal.mallick.model.response.ParentTaskListResponse;
 import org.kajal.mallick.model.response.TaskListResponse;
@@ -50,8 +51,8 @@ class TaskController {
 
     @PostMapping("/createTask")
     public @ResponseBody
-    BaseResponse createTask(@RequestBody @Valid TaskRequest taskRequest) {
-        return taskService.saveTask(taskRequest);
+    BaseResponse createTask(@RequestBody @Valid CreateTaskRequest createTaskRequest) {
+        return taskService.saveTask(createTaskRequest);
     }
 
     @PostMapping("/createParentTask")
@@ -62,7 +63,7 @@ class TaskController {
 
     @PostMapping("/updateTask")
     public @ResponseBody
-    BaseResponse updateTask(@RequestBody @Valid TaskRequest taskRequest) {
-        return taskService.update(taskRequest);
+    BaseResponse updateTask(@RequestBody @Valid UpdateTaskRequest updateTaskRequest) {
+        return taskService.update(updateTaskRequest);
     }
 }
