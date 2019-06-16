@@ -21,7 +21,8 @@ public class ProjectDaoImpl implements ProjectDao {
 
     @Override
     public List<Project> findAllProjects() {
-        return projectRepository.findAll();
+        //return projectRepository.findAll();
+        return projectRepository.findAllProjectsWithUser();
     }
 
     @Override

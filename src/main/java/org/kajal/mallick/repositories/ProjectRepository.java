@@ -13,14 +13,16 @@ import java.util.Optional;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     static final String UPDATE_PROJECT_DETAILS = "update Project p set p.projectName = :projectName, p.startDate = :startDate, p.endDate = :endDate, p.priority = :priority where p.projectId = :projectId";
     static final String UPDATE_PROJECT_STATUS = "update Project p set p.status = :status where p.projectId = :projectId";
-    static final String FIND_ALL_PROJECTS_WITH_TASKS = "SELECT p FROM Project p LEFT JOIN FETCH p.tasks";
+    static final String FIND_ALL_PROJECTS_WITH_USER = "SELECT p FROM Project p JOIN FETCH p.user";
+    static final String FIND_ALL_ACTIVE_PROJECTS = "SELECT p FROM Project p JOIN FETCH p.user WHERE p.status = :status";
     static final String FIND_PROJECT_BY_PROJECT_ID_WITH_TASKS = "SELECT p FROM Project p LEFT JOIN FETCH p.tasks WHERE p.projectId = :projectId";
 
 
-    @Query(FIND_ALL_PROJECTS_WITH_TASKS)
-    List<Project> findAllProjectsWithTasks();
+    @Query(FIND_ALL_PROJECTS_WITH_USER)
+    List<Project> findAllProjectsWithUser();
 
-    List<Project> findAllByStatus(String status);
+    @Query(FIND_ALL_ACTIVE_PROJECTS)
+    List<Project> findAllByStatus(@Param("status") String status);
 
     @Query(FIND_PROJECT_BY_PROJECT_ID_WITH_TASKS)
     Optional<Project> findProjectByIdWithTasks(@Param("projectId") long id);

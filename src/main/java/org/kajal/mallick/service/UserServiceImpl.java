@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         User user = userFacade.findByUserId(userId);
 
         if (user != null) {
-            userResponse.setUserDto(new UserDto(user));
+            userResponse.setUserDto(new UserDto(user, false));
             baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "User found for Id:" + userId);
             logger.info("Find user by id:{}", userId);
         } else {
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
             userList
                     .forEach(user -> userListResponse
                             .getUsers()
-                            .add(new UserDto(user)));
+                            .add(new UserDto(user, false)));
             baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), String.format(successMessage, userList.size()));
 
             logger.info(String.format(successMessage, userList.size()));

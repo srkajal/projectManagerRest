@@ -70,7 +70,7 @@ public class ProjectDtoTest {
         project1.setPriority(1);
         project1.setTasks(Collections.singletonList(task1));
 
-        ProjectDto projectDto1 = new ProjectDto(project1);
+        ProjectDto projectDto1 = new ProjectDto(project1, false);
 
         assertEquals("Project Name", projectDto1.getProjectName());
     }

@@ -23,7 +23,12 @@ class ProjectController {
 
     @GetMapping(value = "/findAllProjects")
     ProjectListResponse findAllProjects() {
-        return projectService.findAllProjects();
+        return projectService.findAllProjects(false);
+    }
+
+    @GetMapping(value = "/findAllProjectsDetails")
+    ProjectListResponse findAllProjectsWithDetails() {
+        return projectService.findAllProjects(true);
     }
 
     @GetMapping(value = "/findAllActiveProjects")

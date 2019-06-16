@@ -46,7 +46,7 @@ public class ProjectDaoImplTest {
 
     @Test
     public void findAllProjects() {
-        when(projectRepository.findAll()).thenReturn(Collections.singletonList(project2));
+        when(projectRepository.findAllProjectsWithUser()).thenReturn(Collections.singletonList(project2));
 
         List<Project> projects = projectDao.findAllProjects();
         assertNotNull(projects);

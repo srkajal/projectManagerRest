@@ -48,7 +48,7 @@ public class Task implements Serializable {
         this.taskId = taskId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "parent_id")
     public ParentTask getParentTask() {
         return parentTask;
@@ -68,7 +68,7 @@ public class Task implements Serializable {
         this.project = project;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "task")
+    @OneToOne(mappedBy = "task")
     public User getUser() {
         return user;
     }

@@ -83,7 +83,7 @@ public class UserDtoTest {
         user.setProject(project);
         user.setTask(task);
 
-        UserDto userDto1 = new UserDto(user);
+        UserDto userDto1 = new UserDto(user, true);
         assertEquals(7l, userDto1.getTask().getTaskId());
         assertEquals(8l, userDto1.getUserId());
         assertEquals(6l, userDto1.getProject().getProjectId());

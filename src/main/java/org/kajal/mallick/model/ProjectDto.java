@@ -29,23 +29,31 @@ public class ProjectDto implements Serializable {
     public ProjectDto() {
     }
 
-    public ProjectDto(long projectId, String projectName, String startDate, String endDate, int priority, long noOfTasks) {
+    public ProjectDto(long projectId, String projectName, String startDate, String endDate, int priority) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.priority = priority;
+    }
+
+    public ProjectDto(long projectId, String projectName, String startDate, String endDate, int priority, long noOfTasks) {
+        this(projectId, projectName, startDate, endDate, priority);
         this.noOfTasks = noOfTasks;
     }
 
-    public ProjectDto(Project project) {
-        this(project.getProjectId(), project.getProjectName(), String.valueOf(project.getStartDate()), String.valueOf(project.getEndDate()), project.getPriority(), project.getTasks().size());
-        this.noOfTasksCompleted = getCountOfCompletedTasks(project.getTasks());
-        this.status = project.getStatus();
+    public ProjectDto(Project project, boolean detailsRequired) {
+        this(project.getProjectId(), project.getProjectName(), String.valueOf(project.getStartDate()), String.valueOf(project.getEndDate()), project.getPriority());
+
         if (project.getUser() != null) {
             this.userId = project.getUser().getUserId();
         }
 
+        if (detailsRequired) {
+            this.noOfTasks = project.getTasks().size();
+            this.noOfTasksCompleted = getCountOfCompletedTasks(project.getTasks());
+            this.status = project.getStatus();
+        }
     }
 
     public long getProjectId() {

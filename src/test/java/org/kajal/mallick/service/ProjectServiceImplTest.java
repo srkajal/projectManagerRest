@@ -49,7 +49,7 @@ public class ProjectServiceImplTest {
     public void findAllProjects() {
         when(projectFacade.findAllProjects()).thenReturn(Collections.singletonList(projectTestObject));
 
-        assertEquals(projectTestObject.getProjectId(), projectService.findAllProjects().getProjects().get(0).getProjectId());
+        assertEquals(projectTestObject.getProjectId(), projectService.findAllProjects(false).getProjects().get(0).getProjectId());
 
     }
 

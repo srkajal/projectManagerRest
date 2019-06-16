@@ -20,17 +20,26 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(long userId, String firstName, String lastName, int employeeId, ProjectDto project, TaskDto task) {
+    public UserDto(long userId, String firstName, String lastName, int employeeId) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.employeeId = employeeId;
+    }
+
+    public UserDto(long userId, String firstName, String lastName, int employeeId, ProjectDto project, TaskDto task) {
+        this(userId, firstName, lastName, employeeId);
         this.project = project;
         this.task = task;
     }
 
-    public UserDto(User user) {
-        this(user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmployeeId(), user.getProject() != null ? new ProjectDto(user.getProject()) : null, user.getTask() != null ? new TaskDto(user.getTask()) : null);
+    public UserDto(User user, boolean detailsRequired) {
+        this(user.getUserId(), user.getFirstName(), user.getLastName(), user.getEmployeeId());
+
+        if (detailsRequired) {
+            this.project = user.getProject() != null ? new ProjectDto(user.getProject(), false) : null;
+            this.task = user.getTask() != null ? new TaskDto(user.getTask()) : null;
+        }
     }
 
     public long getUserId() {

@@ -30,7 +30,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectListResponse findAllProjects() {
+    public ProjectListResponse findAllProjects(boolean detailsRequired) {
         ProjectListResponse projectListResponse = new ProjectListResponse();
         BaseResponse baseResponse;
 
@@ -40,7 +40,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectList
                     .forEach(project -> projectListResponse
                             .getProjects()
-                            .add(new ProjectDto(project)));
+                            .add(new ProjectDto(project, detailsRequired)));
             baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Number of projects found " + projectList.size());
 
             logger.info("Find number of project:{}", projectList.size());
@@ -65,7 +65,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectList
                     .forEach(project -> projectListResponse
                             .getProjects()
-                            .add(new ProjectDto(project)));
+                            .add(new ProjectDto(project, false)));
             baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Number of projects found " + projectList.size());
 
             logger.info("Find number of project:{}", projectList.size());
@@ -91,7 +91,7 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectFacade.findByProjectId(projectId);
 
         if (project != null) {
-            projectResponse.setProjectDto(new ProjectDto(project));
+            projectResponse.setProjectDto(new ProjectDto(project, false));
             baseResponse = new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Project found for Id:" + projectId);
             logger.info("Find project by id:{}", projectId);
         } else {

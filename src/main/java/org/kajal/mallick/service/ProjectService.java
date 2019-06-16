@@ -6,7 +6,7 @@ import org.kajal.mallick.model.response.ProjectListResponse;
 import org.kajal.mallick.model.response.ProjectResponse;
 
 public interface ProjectService {
-    ProjectListResponse findAllProjects();
+    ProjectListResponse findAllProjects(boolean detailsRequired);
 
     ProjectListResponse findAllActiveProjects();
 

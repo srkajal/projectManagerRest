@@ -89,7 +89,7 @@ public class Project implements Serializable {
         this.priority = priority;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "project")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
     public List<Task> getTasks() {
         return tasks;
     }
@@ -98,7 +98,7 @@ public class Project implements Serializable {
         this.tasks = tasks;
     }
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "project")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "project")
     public User getUser() {
         return user;
     }

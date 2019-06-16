@@ -58,7 +58,7 @@ public class ProjectControllerTest {
         projectListResponse.setProjects(Collections.singletonList(projectDto));
         projectListResponse.setBaseResponse(new BaseResponse(HttpStatus.FOUND.getReasonPhrase(), HttpStatus.FOUND.value(), "Projects found"));
 
-        when(projectService.findAllProjects()).thenReturn(projectListResponse);
+        when(projectService.findAllProjects(anyBoolean())).thenReturn(projectListResponse);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(PATH + "findAllProjects")
                 .accept(MediaType.APPLICATION_JSON)
@@ -70,7 +70,7 @@ public class ProjectControllerTest {
                 .andExpect(jsonPath("$.projects", hasSize(1)))
                 .andExpect(jsonPath("$.projects[0].project_name", org.hamcrest.Matchers.is(PROJECT_NAME)));
 
-        verify(projectService, times(1)).findAllProjects();
+        verify(projectService, times(1)).findAllProjects(anyBoolean());
     }
 
     @Test
